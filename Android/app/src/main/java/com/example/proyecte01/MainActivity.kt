@@ -1,9 +1,11 @@
 package com.example.proyecte01
 
+import ApiService
 import Product
 import ProductAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log // Importar Log para depuración
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
@@ -11,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.Toolbar
+import retrofit2.*
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var productAdapter: ProductAdapter
     private val cartProducts = mutableListOf<Product>()
     private lateinit var searchView: SearchView
+    private lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,27 +46,22 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        val dummyProducts = listOf(
-            Product(1, "Skogsvärdet (The Forest Blade)", "Straight from the heart of the Scandinavian wilderness...", 999.99, 10, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGGQJeHVKNeQXSYNwvo9XcNjMEW3P6ykFjLQ&s", true),
-            Product(2, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true),
-            Product(3, "Ensalada", "Ensalada fresca y saludable", 4.50, 15, "https://example.com/image3.jpg", true),
-            Product(4, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true),
-            Product(5, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true),
-            Product(6, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true),
-            Product(7, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true),
-            Product(8, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true),
-            Product(9, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true),
-            Product(10, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true),
-            Product(11, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true),
-            Product(12, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true),
-            Product(13, "Bebida", "Refresco frío", 1.50, 20, "https://example.com/image2.jpg", true)
-        )
-
-        productAdapter = ProductAdapter(dummyProducts, { product ->
+        // Inicializar el adaptador vacío antes de cargar los productos
+        productAdapter = ProductAdapter(listOf(), { product ->
             addToCart(product)
         }, true)
-
         recyclerView.adapter = productAdapter
+
+        // Inicializar Retrofit
+        val retrofit = Retrofit.Builder()
+            .baseUrl("HTTP://DAM.INSPEDRALBES.CAT:21345/") // Cambia la URL por la de tu servidor
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        apiService = retrofit.create(ApiService::class.java)
+
+        // Cargar productos del servidor
+        loadProductsFromServer()
 
         val cartIcon: ImageView = findViewById(R.id.cartIcon)
         cartIcon.setOnClickListener {
@@ -69,6 +69,28 @@ class MainActivity : AppCompatActivity() {
             intent.putParcelableArrayListExtra("cart_products", ArrayList(cartProducts))
             startActivity(intent)
         }
+    }
+
+    private fun loadProductsFromServer() {
+        val call = apiService.getProducts()
+
+        call.enqueue(object : Callback<List<Product>> {
+            override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
+                if (response.isSuccessful) {
+                    val products = response.body() ?: listOf()
+                    Log.d("MainActivity", "Productos recibidos: ${products.size}") // Log para ver cuántos productos se recibieron
+                    productAdapter.updateProducts(products)
+                } else {
+                    Log.e("MainActivity", "Error en la respuesta: ${response.code()}") // Log en caso de error
+                    Toast.makeText(this@MainActivity, "Error al cargar productos", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<Product>>, t: Throwable) {
+                Log.e("MainActivity", "Error de red: ${t.message}") // Log en caso de fallo de red
+                Toast.makeText(this@MainActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun addToCart(product: Product) {

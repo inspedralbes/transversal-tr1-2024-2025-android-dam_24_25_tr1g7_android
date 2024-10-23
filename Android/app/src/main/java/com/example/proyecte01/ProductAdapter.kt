@@ -16,6 +16,9 @@ class ProductAdapter(
 
     private var filteredProducts = products
 
+    // Definir la URL base para las imágenes
+    private val baseUrl = "http://dam.inspedralbes.cat:21345/"
+
     class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productName: TextView = itemView.findViewById(R.id.productName)
         val productDescription: TextView = itemView.findViewById(R.id.productDescription)
@@ -35,8 +38,12 @@ class ProductAdapter(
         holder.productDescription.text = product.description
         holder.productPrice.text = "${product.price} €"
 
+        // Construir la URL completa de la imagen
+        val imageUrl = baseUrl + product.image_file
+
+        // Cargar la imagen utilizando Glide
         Glide.with(holder.itemView.context)
-            .load(product.image_file)
+            .load(imageUrl)
             .into(holder.productImage)
 
         holder.addToCartButton.visibility = if (showAddToCartButton) View.VISIBLE else View.GONE
@@ -60,6 +67,13 @@ class ProductAdapter(
                         it.description.contains(query, ignoreCase = true)
             }
         }
+        notifyDataSetChanged()
+    }
+
+    // Nuevo método para actualizar la lista de productos
+    fun updateProducts(newProducts: List<Product>) {
+        products = newProducts
+        filteredProducts = newProducts
         notifyDataSetChanged()
     }
 }

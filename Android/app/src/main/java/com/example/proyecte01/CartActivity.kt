@@ -1,3 +1,4 @@
+// CartActivity.kt
 package com.example.proyecte01
 
 import Product
@@ -6,6 +7,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -21,31 +23,36 @@ class CartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
 
+        // Inicializa las vistas
         recyclerView = findViewById(R.id.recyclerViewCart)
         totalPriceTextView = findViewById(R.id.totalPrice)
         pickupTimeEditText = findViewById(R.id.pickupTime)
 
+        // Obtiene los productos del carrito desde el Intent
         val cartProducts: List<Product> = intent.getParcelableArrayListExtra("cart_products") ?: emptyList()
-        productAdapter = ProductAdapter(cartProducts, {}, false)
 
+        // Configura el adaptador con un lambda vacío para 'onAddToCartClicked'
+        productAdapter = ProductAdapter(cartProducts, {}, false, {})
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = productAdapter
 
+        // Calcula y muestra el precio total
         val totalPrice = cartProducts.sumOf { it.price }
-        totalPriceTextView.text = "Precio total: ${totalPrice} €"
+        totalPriceTextView.text = String.format("Precio total: %.2f €", totalPrice)
 
+        // Configura el botón de cancelar
         val cancelButton: Button = findViewById(R.id.cancelButton)
         cancelButton.setOnClickListener {
-            // Cancelar y volver a la actividad anterior
+            // Cerrar la actividad y volver a la anterior
             finish()
         }
 
+        // Configura el botón de realizar el pago
         val checkoutButton: Button = findViewById(R.id.checkoutButton)
         checkoutButton.setOnClickListener {
-            val pickupTime = pickupTimeEditText.text.toString()
-            // Lógica para continuar con el pago, pasar a la siguiente actividad o mostrar un mensaje
+            val pickupTime = pickupTimeEditText.text.toString().trim()
             if (pickupTime.isEmpty()) {
-                // Mostrar mensaje de error o advertencia
+                // Mostrar mensaje de error si no se indica la hora de recogida
                 pickupTimeEditText.error = "Por favor, indica la hora de recogida"
             } else {
                 // Aquí puedes implementar la lógica para el pago
@@ -54,6 +61,9 @@ class CartActivity : AppCompatActivity() {
                 // intent.putExtra("pickup_time", pickupTime)
                 // startActivity(intent)
                 // finish()
+
+                // Mensaje de éxito por ahora
+                Toast.makeText(this, "Hora de recogida: $pickupTime", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -1,3 +1,4 @@
+// MainActivity.kt
 package com.example.proyecte01
 
 import ApiService
@@ -5,7 +6,7 @@ import Product
 import ProductAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log // Importar Log para depuración
+import android.util.Log
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
@@ -23,6 +24,11 @@ class MainActivity : AppCompatActivity() {
     private val cartProducts = mutableListOf<Product>()
     private lateinit var searchView: SearchView
     private lateinit var apiService: ApiService
+
+    companion object {
+        private const val BASE_URL = "http://dam.inspedralbes.cat:21345/"
+        private const val TAG = "MainActivity"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,15 +52,17 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        // Inicializar el adaptador vacío antes de cargar los productos
+        // Inicializar el adaptador correctamente
         productAdapter = ProductAdapter(listOf(), { product ->
-            addToCart(product)
-        }, true)
+            addToCart(product) // Manejo del clic en "Añadir al carrito"
+        }, true, { product ->
+            openProductDetail(product) // Manejo del clic en el producto
+        })
         recyclerView.adapter = productAdapter
 
         // Inicializar Retrofit
         val retrofit = Retrofit.Builder()
-            .baseUrl("HTTP://DAM.INSPEDRALBES.CAT:21345/") // Cambia la URL por la de tu servidor
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -65,9 +73,7 @@ class MainActivity : AppCompatActivity() {
 
         val cartIcon: ImageView = findViewById(R.id.cartIcon)
         cartIcon.setOnClickListener {
-            val intent = Intent(this, CartActivity::class.java)
-            intent.putParcelableArrayListExtra("cart_products", ArrayList(cartProducts))
-            startActivity(intent)
+            openCart()
         }
     }
 
@@ -78,23 +84,40 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
                 if (response.isSuccessful) {
                     val products = response.body() ?: listOf()
-                    Log.d("MainActivity", "Productos recibidos: ${products.size}") // Log para ver cuántos productos se recibieron
+                    Log.d(TAG, "Productos recibidos: ${products.size}") // Log para ver cuántos productos se recibieron
                     productAdapter.updateProducts(products)
                 } else {
-                    Log.e("MainActivity", "Error en la respuesta: ${response.code()}") // Log en caso de error
+                    Log.e(TAG, "Error en la respuesta: ${response.code()}") // Log en caso de error
                     Toast.makeText(this@MainActivity, "Error al cargar productos", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-                Log.e("MainActivity", "Error de red: ${t.message}") // Log en caso de fallo de red
+                Log.e(TAG, "Error de red: ${t.message}") // Log en caso de fallo de red
                 Toast.makeText(this@MainActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     private fun addToCart(product: Product) {
-        cartProducts.add(product)
-        Toast.makeText(this, "${product.product_name} añadido al carrito", Toast.LENGTH_SHORT).show()
+        if (!cartProducts.contains(product)) {
+            cartProducts.add(product)
+            Toast.makeText(this, "${product.product_name} añadido al carrito", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "${product.product_name} ya está en el carrito", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun openProductDetail(product: Product) {
+        // Abrir la actividad de detalles del producto
+        val intent = Intent(this, ProductDetailActivity::class.java)
+        intent.putExtra("product", product)
+        startActivity(intent)
+    }
+
+    private fun openCart() {
+        val intent = Intent(this, CartActivity::class.java)
+        intent.putParcelableArrayListExtra("cart_products", ArrayList(cartProducts))
+        startActivity(intent)
     }
 }

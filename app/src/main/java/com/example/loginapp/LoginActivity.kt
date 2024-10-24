@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.R
@@ -16,6 +17,11 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        val registerText = findViewById<TextView>(R.id.registerText)
+        registerText.setOnClickListener {
+            val intent = Intent(this@LoginActivity, RegisterActivity::class.java)
+            startActivity(intent)
+        }
 
         val usernameInput = findViewById<EditText>(R.id.username)
         val passwordInput = findViewById<EditText>(R.id.password)
@@ -38,7 +44,6 @@ class LoginActivity : AppCompatActivity() {
 
                     if (user != null) {
                         Toast.makeText(this@LoginActivity, "Login successful!", Toast.LENGTH_SHORT).show()
-                        // Navega a la pantalla de bienvenida
                         val intent = Intent(this@LoginActivity, WelcomeActivity::class.java)
                         intent.putExtra("first_name", user.first_name)
                         startActivity(intent)

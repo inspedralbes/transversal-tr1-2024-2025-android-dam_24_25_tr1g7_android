@@ -1,3 +1,5 @@
+package com.example.loginapp
+
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 

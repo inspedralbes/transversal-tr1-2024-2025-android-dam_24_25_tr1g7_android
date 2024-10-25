@@ -1,6 +1,5 @@
-package com.example.proyecte01
+package com.example.loginapp
 
-import Product
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -21,7 +20,6 @@ class ProductDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_product_detail)
 
-        // Inicializa las vistas
         backButton = findViewById(R.id.backButton)
         productName = findViewById(R.id.productName)
         productDescription = findViewById(R.id.product_description)

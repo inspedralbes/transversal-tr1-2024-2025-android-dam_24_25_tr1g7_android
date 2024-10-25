@@ -1,9 +1,6 @@
 
-package com.example.proyecte01
+package com.example.loginapp
 
-import ApiService
-import Product
-import ProductAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.Toolbar
+import com.example.proyecte01.R
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 

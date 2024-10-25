@@ -1,4 +1,4 @@
-// ProductAdapter.kt
+
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +14,7 @@ class ProductAdapter(
     private var products: List<Product>,
     private val onAddToCartClicked: (Product) -> Unit,
     private val showAddToCartButton: Boolean,
-    private val onProductClicked: (Product) -> Unit // Listener para el clic en el producto
+    private val onProductClicked: (Product) -> Unit
 ) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     private var filteredProducts = products
@@ -36,27 +36,27 @@ class ProductAdapter(
         holder.productName.text = product.product_name
         holder.productPrice.text = "${product.price} €"
 
-        // Construir la URL completa de la imagen
-        val imageUrl = "http://dam.inspedralbes.cat:21345/sources/Imatges/${product.image_file}"
-        Log.d("ProductAdapter", "Loading image from URL: $imageUrl") // Imprime la URL en el logcat
 
-        // Cargar la imagen utilizando Glide
+        val imageUrl = "http://dam.inspedralbes.cat:21345/sources/Imatges/${product.image_file}"
+        Log.d("ProductAdapter", "Loading image from URL: $imageUrl")
+
+
         Glide.with(holder.itemView.context)
             .load(imageUrl)
             .into(holder.productImage)
 
-        // Mostrar u ocultar el botón "Añadir al carrito"
+
         holder.addToCartButton.visibility = if (showAddToCartButton) View.VISIBLE else View.GONE
 
-        // Configurar el listener para el clic en el producto (elemento de la lista)
+
         holder.itemView.setOnClickListener {
-            onProductClicked(product) // Llama al listener para abrir detalles
+            onProductClicked(product)
         }
 
-        // Configurar el listener para el clic en el botón "Añadir al carrito"
+
         holder.addToCartButton.setOnClickListener {
             if (showAddToCartButton) {
-                onAddToCartClicked(product) // Llama al listener para añadir al carrito
+                onAddToCartClicked(product)
             }
         }
     }

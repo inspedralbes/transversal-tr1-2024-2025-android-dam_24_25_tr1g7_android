@@ -2,7 +2,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Botón para volver atrás, ubicado en la esquina superior izquierda -->
+
     <ImageButton
         android:id="@+id/backButton"
         android:layout_width="48dp"
@@ -13,7 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_margin="8dp"/>
 
-    <!-- Imagen del producto -->
+
     <ImageView
         android:id="@+id/productImage"
         android:layout_width="match_parent"

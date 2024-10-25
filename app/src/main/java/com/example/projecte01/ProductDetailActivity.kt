@@ -11,7 +11,7 @@ import com.example.proyecte01.R
 
 class ProductDetailActivity : AppCompatActivity() {
 
-    private lateinit var backButton: ImageButton // Botón de retroceso
+    private lateinit var backButton: ImageButton
     private lateinit var productName: TextView
     private lateinit var productDescription: TextView
     private lateinit var productPrice: TextView
@@ -22,21 +22,21 @@ class ProductDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_product_detail)
 
         // Inicializa las vistas
-        backButton = findViewById(R.id.backButton) // Inicializa el botón de retroceso
+        backButton = findViewById(R.id.backButton)
         productName = findViewById(R.id.productName)
         productDescription = findViewById(R.id.product_description)
         productPrice = findViewById(R.id.productPrice)
         productImage = findViewById(R.id.productImage)
 
-        // Configura el listener para el clic del botón de retroceso
+
         backButton.setOnClickListener {
-            onBackPressed() // Vuelve a la pantalla anterior
+            onBackPressed()
         }
 
-        // Recibe el producto del intent
+
         val product: Product? = intent.getParcelableExtra("product")
 
-        // Asegúrate de que el producto no sea nulo
+
         product?.let {
             productName.text = it.product_name
             productPrice.text = "${it.price} €"

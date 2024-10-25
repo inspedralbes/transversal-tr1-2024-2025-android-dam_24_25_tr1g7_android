@@ -32,7 +32,7 @@
         android:textSize="14sp"
         android:paddingTop="4dp" />
 
-    <!-- Botón para añadir al carrito -->
+
     <Button
         android:id="@+id/addToCartButton"
         android:layout_width="wrap_content"

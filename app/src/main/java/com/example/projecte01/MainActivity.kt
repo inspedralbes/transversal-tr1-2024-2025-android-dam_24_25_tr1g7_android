@@ -1,4 +1,4 @@
-// MainActivity.kt
+
 package com.example.proyecte01
 
 import ApiService
@@ -52,15 +52,15 @@ class MainActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
-        // Inicializar el adaptador correctamente
+
         productAdapter = ProductAdapter(listOf(), { product ->
-            addToCart(product) // Manejo del clic en "Añadir al carrito"
+            addToCart(product)
         }, true, { product ->
-            openProductDetail(product) // Manejo del clic en el producto
+            openProductDetail(product)
         })
         recyclerView.adapter = productAdapter
 
-        // Inicializar Retrofit
+
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
         apiService = retrofit.create(ApiService::class.java)
 
-        // Cargar productos del servidor
+
         loadProductsFromServer()
 
         val cartIcon: ImageView = findViewById(R.id.cartIcon)
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openProductDetail(product: Product) {
-        // Abrir la actividad de detalles del producto
+
         val intent = Intent(this, ProductDetailActivity::class.java)
         intent.putExtra("product", product)
         startActivity(intent)

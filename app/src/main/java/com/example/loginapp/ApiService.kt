@@ -3,6 +3,7 @@ package com.example.loginapp
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.QueryMap
 
 interface ApiService {
@@ -14,4 +15,7 @@ interface ApiService {
 
     @GET("getProductes")
     fun getProducts(): Call<List<Product>>
+
+    @PUT("/updateUsuari")
+    fun updateUser(@QueryMap params: Map<String, String>): Call<Void>
 }

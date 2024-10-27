@@ -131,7 +131,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openProfile() {
-        val intent = Intent(this, ProfileActivity::class.java)
+        val intent = Intent(this, PerfilActivity::class.java)
         startActivity(intent)
     }
 

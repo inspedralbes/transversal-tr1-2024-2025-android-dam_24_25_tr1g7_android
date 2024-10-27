@@ -2,24 +2,29 @@ package com.example.loginapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.appcompat.widget.Toolbar
 import com.example.proyecte01.R
-import retrofit2.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
-    private val cartProducts = mutableListOf<Product>()
     private lateinit var searchView: SearchView
+    private val cartProducts = mutableListOf<Product>()
     private lateinit var apiService: ApiService
 
     companion object {
@@ -33,6 +38,12 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
+        val profileIcon: ImageView = findViewById(R.id.profileIcon)
+        profileIcon.setOnClickListener {
+            openProfile()
+        }
 
         searchView = findViewById(R.id.searchView)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -48,28 +59,19 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-
-
-        productAdapter = ProductAdapter(listOf(), { product ->
-            addToCart(product)
-        }, true, { product ->
-            openProductDetail(product)
-        })
+        productAdapter = ProductAdapter(listOf(), { product -> addToCart(product) }, true, { product -> openProductDetail(product) })
         recyclerView.adapter = productAdapter
-
 
         val retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
         apiService = retrofit.create(ApiService::class.java)
-
 
         loadProductsFromServer()
 
-        val cartIcon: ImageView = findViewById(R.id.cartIcon)
-        cartIcon.setOnClickListener {
+        val cartFab: FloatingActionButton = findViewById(R.id.cartFab)
+        cartFab.setOnClickListener {
             openCart()
         }
     }
@@ -91,21 +93,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadProductsFromServer() {
         val call = apiService.getProducts()
-
         call.enqueue(object : Callback<List<Product>> {
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
                 if (response.isSuccessful) {
                     val products = response.body() ?: listOf()
-                    Log.d(TAG, "Productos recibidos: ${products.size}") // Log para ver cuántos productos se recibieron
                     productAdapter.updateProducts(products)
                 } else {
-                    Log.e(TAG, "Error en la respuesta: ${response.code()}") // Log en caso de error
                     Toast.makeText(this@MainActivity, "Error al cargar productos", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-                Log.e(TAG, "Error de red: ${t.message}") // Log en caso de fallo de red
                 Toast.makeText(this@MainActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
@@ -126,12 +124,21 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-
     private fun openCart() {
         val intent = Intent(this, CartActivity::class.java)
         intent.putParcelableArrayListExtra("cart_products", ArrayList(cartProducts))
         startActivity(intent)
     }
 
+    private fun openProfile() {
+        val intent = Intent(this, PerfilActivity::class.java)
+        startActivity(intent)
+    }
 
+    private fun logout() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
+    }
 }

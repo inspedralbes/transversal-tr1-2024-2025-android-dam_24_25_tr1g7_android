@@ -16,7 +16,6 @@
         android:networkSecurityConfig="@xml/network_security_config"
         tools:targetApi="31">
 
-        <!-- LoginActivity como la actividad principal (MAIN y LAUNCHER) -->
         <activity
             android:exported="true"
             android:name="com.example.loginapp.LoginActivity">
@@ -26,13 +25,11 @@
             </intent-filter>
         </activity>
 
-        <!-- Otras actividades de la aplicación -->
         <activity android:name="com.example.loginapp.RegisterActivity"/>
         <activity android:name="com.example.loginapp.MainActivity"/>
         <activity android:name="com.example.loginapp.ProductDetailActivity"/>
         <activity android:name="com.example.loginapp.CartActivity"/>
-
-
+        <activity android:name="com.example.loginapp.PerfilActivity" />
     </application>
 
 </manifest>

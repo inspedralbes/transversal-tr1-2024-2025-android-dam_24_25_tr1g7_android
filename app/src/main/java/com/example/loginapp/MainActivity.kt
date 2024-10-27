@@ -107,15 +107,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openProductDetail(product: Product) {
-
         val intent = Intent(this, ProductDetailActivity::class.java)
         intent.putExtra("product", product)
         startActivity(intent)
     }
+
 
     private fun openCart() {
         val intent = Intent(this, CartActivity::class.java)
         intent.putParcelableArrayListExtra("cart_products", ArrayList(cartProducts))
         startActivity(intent)
     }
+
+
 }

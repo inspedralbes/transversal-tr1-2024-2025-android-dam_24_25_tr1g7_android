@@ -1,4 +1,4 @@
-package com.example.loginapp
+package com.example.projecte01
 
 import android.os.Bundle
 import android.widget.TextView

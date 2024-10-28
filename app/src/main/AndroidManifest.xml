@@ -30,6 +30,7 @@
         <activity android:name="com.example.loginapp.ProductDetailActivity"/>
         <activity android:name="com.example.loginapp.CartActivity"/>
         <activity android:name="com.example.loginapp.PerfilActivity" />
+
     </application>
 
 </manifest>

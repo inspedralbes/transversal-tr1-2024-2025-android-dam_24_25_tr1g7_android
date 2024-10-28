@@ -11,6 +11,7 @@
         android:background="@color/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
+
         <ImageView
             android:id="@+id/profileIcon"
             android:layout_width="32dp"

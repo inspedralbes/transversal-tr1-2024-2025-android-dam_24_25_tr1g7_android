@@ -1,4 +1,6 @@
 package com.example.loginapp
+
+import Product
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,6 +26,7 @@ class ProductAdapter(
         val productPrice: TextView = itemView.findViewById(R.id.productPrice)
         val productImage: ImageView = itemView.findViewById(R.id.productImage)
         val addToCartButton: Button = itemView.findViewById(R.id.addToCartButton)
+        val stockInfo: TextView = itemView.findViewById(R.id.stockInfo)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -35,28 +38,25 @@ class ProductAdapter(
         val product = filteredProducts[position]
         holder.productName.text = product.product_name
         holder.productPrice.text = "${product.price} €"
-
+        holder.stockInfo.text = "Stock: ${product.stock}"
 
         val imageUrl = "http://dam.inspedralbes.cat:21345/sources/Imatges/${product.image_file}"
         Log.d("ProductAdapter", "Loading image from URL: $imageUrl")
-
 
         Glide.with(holder.itemView.context)
             .load(imageUrl)
             .into(holder.productImage)
 
-
-        holder.addToCartButton.visibility = if (showAddToCartButton) View.VISIBLE else View.GONE
-
+        holder.addToCartButton.visibility = if (showAddToCartButton && product.stock > 0) View.VISIBLE else View.GONE
 
         holder.itemView.setOnClickListener {
             onProductClicked(product)
         }
 
-
         holder.addToCartButton.setOnClickListener {
-            if (showAddToCartButton) {
+            if (showAddToCartButton && product.stock > 0) {
                 onAddToCartClicked(product)
+                notifyItemChanged(position)
             }
         }
     }

@@ -1,6 +1,6 @@
-
 package com.example.loginapp
 
+import Product
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecte01.R
 
 class CartActivity : AppCompatActivity() {
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var productAdapter: ProductAdapter
+    private lateinit var cartAdapter: CartAdapter
+    private var cartProducts: MutableList<Product> = mutableListOf()
     private lateinit var totalPriceTextView: TextView
     private lateinit var pickupTimeEditText: EditText
 
@@ -22,41 +21,76 @@ class CartActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cart)
 
-
-        recyclerView = findViewById(R.id.recyclerViewCart)
-        totalPriceTextView = findViewById(R.id.totalPrice)
-        pickupTimeEditText = findViewById(R.id.pickupTime)
-
-
-        val cartProducts: List<Product> = intent.getParcelableArrayListExtra("cart_products") ?: emptyList()
-
-
-        productAdapter = ProductAdapter(cartProducts, {}, false, {})
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = productAdapter
-
-
-        val totalPrice = cartProducts.sumOf { it.price }
-        totalPriceTextView.text = String.format("Precio total: %.2f €", totalPrice)
-
-
+        val recyclerView: RecyclerView = findViewById(R.id.cartRecyclerView)
+        totalPriceTextView = findViewById(R.id.totalPriceTextView)
+        pickupTimeEditText = findViewById(R.id.pickupTimeEditText)
+        val checkoutButton: Button = findViewById(R.id.checkoutButton)
         val cancelButton: Button = findViewById(R.id.cancelButton)
-        cancelButton.setOnClickListener {
 
-            finish()
+        cartProducts = intent.getParcelableArrayListExtra<Product>("cart_products")?.toMutableList() ?: mutableListOf()
+
+        cartAdapter = CartAdapter(
+            cartProducts,
+            onIncreaseQuantity = { product -> updateProductQuantity(product, increase = true) },
+            onDecreaseQuantity = { product -> updateProductQuantity(product, increase = false) },
+            onRemoveProduct = { product -> removeProduct(product) }
+        )
+
+        recyclerView.apply {
+            adapter = cartAdapter
+            layoutManager = LinearLayoutManager(this@CartActivity)
         }
 
+        updateTotalPrice()
 
-        val checkoutButton: Button = findViewById(R.id.checkoutButton)
-        checkoutButton.setOnClickListener {
-            val pickupTime = pickupTimeEditText.text.toString().trim()
-            if (pickupTime.isEmpty()) {
+        checkoutButton.setOnClickListener { processCheckout() }
+        cancelButton.setOnClickListener { finish() }
+    }
 
-                pickupTimeEditText.error = "Por favor, indica la hora de recogida"
-            } else {
-
-                Toast.makeText(this, "Hora de recogida: $pickupTime", Toast.LENGTH_SHORT).show()
+    private fun updateProductQuantity(product: Product, increase: Boolean) {
+        when {
+            increase && product.quantityInCart < product.stock -> {
+                product.quantityInCart++
+                updateCartAndUI()
+            }
+            !increase && product.quantityInCart > 1 -> {
+                product.quantityInCart--
+                updateCartAndUI()
+            }
+            !increase && product.quantityInCart == 1 -> {
+                removeProduct(product)
+            }
+            else -> {
+                Toast.makeText(this, "No hay más stock disponible", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun removeProduct(product: Product) {
+        cartProducts.remove(product)
+        updateCartAndUI()
+        Toast.makeText(this, "${product.product_name} eliminado del carrito", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateCartAndUI() {
+        cartAdapter.notifyDataSetChanged()
+        updateTotalPrice()
+    }
+
+    private fun updateTotalPrice() {
+        val total = cartProducts.sumOf { it.price * it.quantityInCart }
+        totalPriceTextView.text = String.format("Total: %.2f €", total)
+    }
+
+    private fun processCheckout() {
+        val pickupTime = pickupTimeEditText.text.toString()
+        if (pickupTime.isBlank()) {
+            Toast.makeText(this, "Por favor, indica la hora de recogida", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Aquí iría la lógica para procesar el pedido
+        Toast.makeText(this, "Procesando pedido para recoger a las $pickupTime", Toast.LENGTH_SHORT).show()
+        // Implementar la lógica real de checkout aquí
     }
 }

@@ -1,5 +1,6 @@
 package com.example.loginapp
 
+import Product
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -59,7 +60,12 @@ class MainActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productAdapter = ProductAdapter(listOf(), { product -> addToCart(product) }, true, { product -> openProductDetail(product) })
+        productAdapter = ProductAdapter(
+            listOf(),
+            { product -> addToCart(product) },
+            true,
+            { product -> openProductDetail(product) }
+        )
         recyclerView.adapter = productAdapter
 
         val retrofit = Retrofit.Builder()
@@ -110,12 +116,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun addToCart(product: Product) {
-        if (!cartProducts.contains(product)) {
-            cartProducts.add(product)
-            Toast.makeText(this, "${product.product_name} añadido al carrito", Toast.LENGTH_SHORT).show()
+        val existingProduct = cartProducts.find { it.product_id == product.product_id }
+        if (existingProduct == null) {
+            if (product.stock > 0) {
+                product.quantityInCart = 1
+                cartProducts.add(product)
+                Toast.makeText(this, "${product.product_name} añadido al carrito", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No hay stock disponible de ${product.product_name}", Toast.LENGTH_SHORT).show()
+            }
         } else {
-            Toast.makeText(this, "${product.product_name} ya está en el carrito", Toast.LENGTH_SHORT).show()
+            if (existingProduct.quantityInCart < existingProduct.stock) {
+                existingProduct.quantityInCart++
+                Toast.makeText(this, "Cantidad de ${product.product_name} incrementada", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No hay más stock disponible de ${product.product_name}", Toast.LENGTH_SHORT).show()
+            }
         }
+        productAdapter.notifyDataSetChanged()
     }
 
     private fun openProductDetail(product: Product) {

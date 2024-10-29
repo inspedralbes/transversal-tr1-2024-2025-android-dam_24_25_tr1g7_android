@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
                         saveUserSession(user)
 
                         Toast.makeText(this@LoginActivity, "Inicio de sesión exitoso!", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@LoginActivity, FullScreenProductActivity::class.java)
+                        val intent = Intent(this@LoginActivity, TiendaActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {

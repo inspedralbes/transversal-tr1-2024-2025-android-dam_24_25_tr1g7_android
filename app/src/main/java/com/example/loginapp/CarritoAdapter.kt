@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.proyecte01.R
 
-class CartAdapter(
+class CarritoAdapter(
     private val cartProducts: MutableList<Product>,
     private val onIncreaseQuantity: (Product) -> Unit,
     private val onDecreaseQuantity: (Product) -> Unit,
     private val onRemoveProduct: (Product) -> Unit
-) : RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
+) : RecyclerView.Adapter<CarritoAdapter.CartViewHolder>() {
 
     class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productImage: ImageView = itemView.findViewById(R.id.cartProductImage)

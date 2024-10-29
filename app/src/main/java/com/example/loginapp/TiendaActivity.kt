@@ -18,20 +18,20 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FullScreenProductActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
-    private lateinit var productAdapter: FullScreenProductAdapter
+    private lateinit var productAdapter: TiendaProductAdapter
 
     override fun onResume() {
         super.onResume()
-        loadUserDetailsInDrawer()
+        cargarDetallesUsuarioMenu()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_fullscreen_product)
+        setContentView(R.layout.activity_tienda_product)
 
         drawerLayout = findViewById(R.id.drawer_layout)
         navigationView = findViewById(R.id.navigation_view)
@@ -39,7 +39,7 @@ class FullScreenProductActivity : AppCompatActivity(), NavigationView.OnNavigati
 
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayShowTitleEnabled(false)// es para que no me aparezca Loginapp en toolbar
 
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar,
@@ -48,11 +48,11 @@ class FullScreenProductActivity : AppCompatActivity(), NavigationView.OnNavigati
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
 
-        loadUserDetailsInDrawer()
+        cargarDetallesUsuarioMenu()
 
         val recyclerView: RecyclerView = findViewById(R.id.fullScreenRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        productAdapter = FullScreenProductAdapter(emptyList(), this) { product ->
+        productAdapter = TiendaProductAdapter(emptyList(), this) { product ->
             if (product.quantityInCart < product.stock) {
                 product.quantityInCart++
                 Toast.makeText(this, "${product.product_name} añadido al carrito", Toast.LENGTH_SHORT).show()
@@ -65,7 +65,7 @@ class FullScreenProductActivity : AppCompatActivity(), NavigationView.OnNavigati
         loadProductsFromServer()
     }
 
-    private fun loadUserDetailsInDrawer() {
+    private fun cargarDetallesUsuarioMenu() {
         val headerView = navigationView.getHeaderView(0)
         val userNameTextView: TextView = headerView.findViewById(R.id.user_name)
         val userEmailTextView: TextView = headerView.findViewById(R.id.user_email)
@@ -77,9 +77,10 @@ class FullScreenProductActivity : AppCompatActivity(), NavigationView.OnNavigati
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.nav_home -> startActivity(Intent(this, TiendaActivity::class.java))
             R.id.nav_profile -> startActivity(Intent(this, PerfilActivity::class.java))
-            R.id.nav_my_products -> startActivity(Intent(this, MainActivity::class.java))
-            R.id.nav_cart -> startActivity(Intent(this, CartActivity::class.java).apply {
+            R.id.nav_my_products -> startActivity(Intent(this, MisProductosActivity::class.java))
+            R.id.nav_cart -> startActivity(Intent(this, CarritoActivity::class.java).apply {
                 putParcelableArrayListExtra("cart_products", ArrayList(productAdapter.cartProducts))
             })
             R.id.nav_logout -> logout()
@@ -105,12 +106,12 @@ class FullScreenProductActivity : AppCompatActivity(), NavigationView.OnNavigati
                     val products = response.body() ?: emptyList()
                     productAdapter.updateProducts(products)
                 } else {
-                    Toast.makeText(this@FullScreenProductActivity, "Error al cargar productos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@TiendaActivity, "Error al cargar productos", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-                Toast.makeText(this@FullScreenProductActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@TiendaActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }

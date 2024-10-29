@@ -2,7 +2,6 @@ package com.example.loginapp
 
 import Product
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.proyecte01.R
 
-class FullScreenProductAdapter(
+class TiendaProductAdapter(
     private var products: List<Product>,
     private val context: Context,
     private val onAddToCartClicked: (Product) -> Unit
-) : RecyclerView.Adapter<FullScreenProductAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<TiendaProductAdapter.ViewHolder>() {
 
     val cartProducts = mutableListOf<Product>()
 

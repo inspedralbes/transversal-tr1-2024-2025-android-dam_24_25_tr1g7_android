@@ -3,10 +3,6 @@ package com.example.loginapp
 import Product
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,7 +16,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MainActivity : AppCompatActivity() {
+class MisProductosActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var productAdapter: ProductAdapter
@@ -35,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_mis_productos)
 
 
 
@@ -75,20 +71,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.main_menu, menu)
-        return false
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_logout -> {
-                logout()
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
     private fun loadProductsFromServer() {
         val call = apiService.getProducts()
@@ -98,12 +80,12 @@ class MainActivity : AppCompatActivity() {
                     val products = response.body() ?: listOf()
                     productAdapter.updateProducts(products)
                 } else {
-                    Toast.makeText(this@MainActivity, "Error al cargar productos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MisProductosActivity, "Error al cargar productos", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<List<Product>>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MisProductosActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -136,7 +118,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openCart() {
-        val intent = Intent(this, CartActivity::class.java)
+        val intent = Intent(this, CarritoActivity::class.java)
         intent.putParcelableArrayListExtra("cart_products", ArrayList(cartProducts))
         startActivity(intent)
     }

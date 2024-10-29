@@ -11,15 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecte01.R
 
-class CartActivity : AppCompatActivity() {
-    private lateinit var cartAdapter: CartAdapter
+class CarritoActivity : AppCompatActivity() {
+    private lateinit var cartAdapter: CarritoAdapter
     private var cartProducts: MutableList<Product> = mutableListOf()
     private lateinit var totalPriceTextView: TextView
     private lateinit var pickupTimeEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_cart)
+        setContentView(R.layout.activity_carrito)
 
         val recyclerView: RecyclerView = findViewById(R.id.cartRecyclerView)
         totalPriceTextView = findViewById(R.id.totalPriceTextView)
@@ -29,7 +29,7 @@ class CartActivity : AppCompatActivity() {
 
         cartProducts = intent.getParcelableArrayListExtra<Product>("cart_products")?.toMutableList() ?: mutableListOf()
 
-        cartAdapter = CartAdapter(
+        cartAdapter = CarritoAdapter(
             cartProducts,
             onIncreaseQuantity = { product -> updateProductQuantity(product, increase = true) },
             onDecreaseQuantity = { product -> updateProductQuantity(product, increase = false) },
@@ -38,7 +38,7 @@ class CartActivity : AppCompatActivity() {
 
         recyclerView.apply {
             adapter = cartAdapter
-            layoutManager = LinearLayoutManager(this@CartActivity)
+            layoutManager = LinearLayoutManager(this@CarritoActivity)
         }
 
         updateTotalPrice()

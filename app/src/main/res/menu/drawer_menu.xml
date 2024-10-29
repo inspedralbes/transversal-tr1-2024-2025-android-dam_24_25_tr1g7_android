@@ -1,0 +1,23 @@
+<!-- res/menu/drawer_menu.xml -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_profile"
+        android:title="Perfil"
+        android:icon="@drawable/user_icono" />
+
+    <item
+        android:id="@+id/nav_my_products"
+        android:title="Mis Productos"
+        android:icon="@drawable/ic_products" />
+
+    <item
+        android:id="@+id/nav_cart"
+        android:title="Mi Carrito"
+        android:icon="@drawable/ic_cart" />
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Cerrar sesión"
+        android:icon="@drawable/logout_icon" />
+
+</menu>

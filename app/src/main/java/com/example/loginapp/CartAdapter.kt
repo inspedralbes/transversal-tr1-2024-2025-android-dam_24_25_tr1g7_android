@@ -29,8 +29,7 @@ class CartAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_cart_product, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_cart_product, parent, false)
         return CartViewHolder(view)
     }
 
@@ -41,19 +40,32 @@ class CartAdapter(
         holder.productPrice.text = String.format("%.2f €", product.price)
         holder.productQuantity.text = product.quantityInCart.toString()
 
-        // Cargar la imagen del producto usando Glide
         Glide.with(holder.itemView.context)
             .load("http://dam.inspedralbes.cat:21345/sources/Imatges/${product.image_file}")
             .placeholder(android.R.drawable.ic_menu_gallery)
             .error(android.R.drawable.ic_dialog_alert)
             .into(holder.productImage)
 
-        holder.increaseButton.setOnClickListener { onIncreaseQuantity(product) }
-        holder.decreaseButton.setOnClickListener { onDecreaseQuantity(product) }
-        holder.removeButton.setOnClickListener { onRemoveProduct(product) }
+        holder.increaseButton.setOnClickListener {
+            if (product.quantityInCart < product.stock) {
+                onIncreaseQuantity(product)
+            }
+        }
 
-        // Deshabilitar el botón de disminuir si la cantidad es 1
+        holder.decreaseButton.setOnClickListener {
+            if (product.quantityInCart > 1) {
+                onDecreaseQuantity(product)
+            } else {
+                onRemoveProduct(product)
+            }
+        }
+
+        holder.removeButton.setOnClickListener {
+            onRemoveProduct(product)
+        }
+
         holder.decreaseButton.isEnabled = product.quantityInCart > 1
+        holder.increaseButton.isEnabled = product.quantityInCart < product.stock
     }
 
     override fun getItemCount() = cartProducts.size

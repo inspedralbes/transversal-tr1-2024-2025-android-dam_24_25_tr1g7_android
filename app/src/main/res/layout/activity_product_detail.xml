@@ -17,11 +17,11 @@
     <ImageView
         android:id="@+id/productImage"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="fitCenter"
-        android:adjustViewBounds="true"
+        android:layout_height="450dp"
         android:layout_below="@id/backButton"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="13dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter" />
 
     <TextView
         android:id="@+id/productName"
@@ -29,6 +29,8 @@
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:paddingTop="8dp"
+        android:layout_margin="10dp"
+
         android:layout_below="@id/productImage" />
 
     <TextView
@@ -36,9 +38,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
+        android:layout_margin="10dp"
+
         android:layout_below="@id/productName" />
 
     <TextView
+        android:layout_margin="10dp"
+
         android:id="@+id/product_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -14,7 +14,7 @@ interface ApiService {
     @POST("/createUsuari")
     fun createUser(@QueryMap params: Map<String, String>): Call<Void>
 
-    @GET("getProductes")
+    @GET("/getProductes")
     fun getProducts(): Call<List<Product>>
 
     @PUT("/updateUsuari")

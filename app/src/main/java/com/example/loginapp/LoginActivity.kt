@@ -55,7 +55,7 @@ class LoginActivity : AppCompatActivity() {
                         saveUserSession(user)
 
                         Toast.makeText(this@LoginActivity, "Inicio de sesión exitoso!", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                        val intent = Intent(this@LoginActivity, TiendaActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
@@ -71,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
             }
         })
     }
+
 
     private fun saveUserSession(user: User) {
         val sharedPref = getSharedPreferences("UserSession", Context.MODE_PRIVATE)

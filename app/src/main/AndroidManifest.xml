@@ -24,12 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.example.loginapp.RegisterActivity"/>
-        <activity android:name="com.example.loginapp.MainActivity"/>
-        <activity android:name="com.example.loginapp.ProductDetailActivity"/>
-        <activity android:name="com.example.loginapp.CartActivity"/>
         <activity android:name="com.example.loginapp.PerfilActivity" />
+        <activity android:name="com.example.loginapp.RegisterActivity"/>
+        <activity android:name="com.example.loginapp.MisProductosActivity"/>
+        <activity android:name="com.example.loginapp.ProductDetailActivity"/>
+        <activity android:name="com.example.loginapp.CarritoActivity"/>
+        <activity android:name="com.example.loginapp.TiendaActivity" />
     </application>
 
 </manifest>

@@ -7,5 +7,7 @@
     <string name="cart">Carrito de compras</string>
     <string name="back">Retroceso</string>
     <string name="profile">Perfil</string>
+    <string name="navigation_drawer_open">Abrir menú</string>
+    <string name="navigation_drawer_close">Cerrar menú</string>
 
 </resources>

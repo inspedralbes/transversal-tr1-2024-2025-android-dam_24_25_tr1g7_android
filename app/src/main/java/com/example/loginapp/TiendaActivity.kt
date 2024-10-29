@@ -23,6 +23,7 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private lateinit var productAdapter: TiendaProductAdapter
+    private val cartProducts = mutableListOf<Product>() // Lista de productos en el carrito
 
     override fun onResume() {
         super.onResume()
@@ -39,7 +40,7 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)// es para que no me aparezca Loginapp en toolbar
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         val toggle = ActionBarDrawerToggle(
             this, drawerLayout, toolbar,
@@ -53,12 +54,7 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         val recyclerView: RecyclerView = findViewById(R.id.fullScreenRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         productAdapter = TiendaProductAdapter(emptyList(), this) { product ->
-            if (product.quantityInCart < product.stock) {
-                product.quantityInCart++
-                Toast.makeText(this, "${product.product_name} añadido al carrito", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "No hay más stock disponible de ${product.product_name}", Toast.LENGTH_SHORT).show()
-            }
+            addToCart(product)
         }
         recyclerView.adapter = productAdapter
 
@@ -81,7 +77,7 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.nav_profile -> startActivity(Intent(this, PerfilActivity::class.java))
             R.id.nav_my_products -> startActivity(Intent(this, MisProductosActivity::class.java))
             R.id.nav_cart -> startActivity(Intent(this, CarritoActivity::class.java).apply {
-                putParcelableArrayListExtra("cart_products", ArrayList(productAdapter.cartProducts))
+                putParcelableArrayListExtra("cart_products", ArrayList(cartProducts))
             })
             R.id.nav_logout -> logout()
         }
@@ -114,5 +110,26 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                 Toast.makeText(this@TiendaActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun addToCart(product: Product) {
+        val existingProduct = cartProducts.find { it.product_id == product.product_id }
+        if (existingProduct == null) {
+            if (product.stock > 0) {
+                product.quantityInCart = 1
+                cartProducts.add(product)
+                Toast.makeText(this, "${product.product_name} añadido al carrito", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No hay stock disponible de ${product.product_name}", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            if (existingProduct.quantityInCart < existingProduct.stock) {
+                existingProduct.quantityInCart++
+                Toast.makeText(this, "Cantidad de ${product.product_name} incrementada", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "No hay más stock disponible de ${product.product_name}", Toast.LENGTH_SHORT).show()
+            }
+        }
+        productAdapter.notifyDataSetChanged()
     }
 }

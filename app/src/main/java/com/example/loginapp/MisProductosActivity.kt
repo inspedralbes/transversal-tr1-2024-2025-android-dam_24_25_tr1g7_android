@@ -3,6 +3,7 @@ package com.example.loginapp
 import Product
 import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,10 +24,12 @@ class MisProductosActivity : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private val cartProducts = mutableListOf<Product>()
     private lateinit var apiService: ApiService
+    private lateinit var backButton: ImageButton
 
     companion object {
         private const val BASE_URL = "http://dam.inspedralbes.cat:21345/"
         private const val TAG = "MainActivity"
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +71,11 @@ class MisProductosActivity : AppCompatActivity() {
         val cartFab: FloatingActionButton = findViewById(R.id.cartFab)
         cartFab.setOnClickListener {
             openCart()
+        }
+
+        backButton = findViewById(R.id.backButton)
+        backButton.setOnClickListener {
+            onBackPressed()
         }
     }
 

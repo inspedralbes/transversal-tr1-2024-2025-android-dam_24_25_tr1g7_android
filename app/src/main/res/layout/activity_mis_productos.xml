@@ -4,8 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageButton
+        android:id="@+id/backButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_back"
+        android:contentDescription="@string/back"
+        android:background="?attr/selectableItemBackground"
+        android:layout_alignParentStart="true"
+        android:layout_margin="8dp"/>
+
     <SearchView
         android:id="@+id/searchView"
+        android:layout_marginLeft="45dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:iconifiedByDefault="false"

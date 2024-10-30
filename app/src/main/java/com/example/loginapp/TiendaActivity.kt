@@ -79,8 +79,9 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_home -> startActivity(Intent(this, TiendaActivity::class.java))
-            R.id.nav_profile -> startActivity(Intent(this, PerfilActivity::class.java))
-            R.id.nav_my_products -> startActivity(Intent(this, MisProductosActivity::class.java))
+            R.id.nav_perfil -> startActivity(Intent(this, PerfilActivity::class.java))
+            R.id.nav_mis_productos -> startActivity(Intent(this, MisProductosActivity::class.java))
+            R.id.nav_mis_pedidos -> startActivity(Intent(this, MisProductosActivity::class.java))
             R.id.nav_cart -> startActivity(Intent(this, CarritoActivity::class.java))
             R.id.nav_logout -> logout()
         }

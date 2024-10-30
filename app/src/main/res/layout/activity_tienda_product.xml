@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -18,11 +19,20 @@
             android:title="Productos"
             android:titleTextColor="@android:color/white" />
 
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fullScreenRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@id/toolbar" />
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_marginLeft="45dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:iconifiedByDefault="false"
+            android:queryHint="Buscar productos" />
+
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView

@@ -7,13 +7,17 @@
         android:icon="@drawable/baseline_home_24"/>
 
     <item
-        android:id="@+id/nav_profile"
+        android:id="@+id/nav_perfil"
         android:title="Perfil"
         android:icon="@drawable/user_icono" />
 
     <item
-        android:id="@+id/nav_my_products"
+        android:id="@+id/nav_mis_productos"
         android:title="Mis Productos"
+        android:icon="@drawable/ic_products" />
+    <item
+        android:id="@+id/nav_mis_pedidos"
+        android:title="Mis Pedidos"
         android:icon="@drawable/ic_products" />
 
     <item

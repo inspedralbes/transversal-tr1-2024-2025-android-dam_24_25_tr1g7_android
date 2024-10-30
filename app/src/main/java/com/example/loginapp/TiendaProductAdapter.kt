@@ -19,7 +19,7 @@ class TiendaProductAdapter(
     private val onAddToCartClicked: (Product) -> Unit
 ) : RecyclerView.Adapter<TiendaProductAdapter.ViewHolder>() {
 
-    val cartProducts = mutableListOf<Product>()
+    private var filteredProducts: List<Product> = products
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val productImage: ImageView = view.findViewById(R.id.fullScreenProductImage)
@@ -35,7 +35,7 @@ class TiendaProductAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val product = products[position]
+        val product = filteredProducts[position] // Utiliza la lista filtrada
         holder.productName.text = product.product_name
         holder.productPrice.text = "${product.price} €"
         holder.productStock.text = "Stock: ${product.stock}"
@@ -47,17 +47,27 @@ class TiendaProductAdapter(
         holder.addToCartButton.setOnClickListener {
             if (product.quantityInCart < product.stock) {
                 onAddToCartClicked(product)
-                cartProducts.add(product)
             } else {
                 Toast.makeText(context, "No hay más stock disponible de ${product.product_name}", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    override fun getItemCount() = products.size
+    override fun getItemCount() = filteredProducts.size // Utiliza la lista filtrada
 
     fun updateProducts(newProducts: List<Product>) {
         products = newProducts
+        filteredProducts = newProducts // Sin filtro inicial, muestra todos
         notifyDataSetChanged()
     }
+
+    fun filter(query: String) {
+        filteredProducts = if (query.isEmpty()) {
+            products // Sin filtro, muestra todos los productos
+        } else {
+            products.filter { it.product_name.contains(query, ignoreCase = true) } // Filtrar por nombre
+        }
+        notifyDataSetChanged() // Actualiza la vista
+    }
 }
+

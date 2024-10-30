@@ -35,7 +35,7 @@ class TiendaProductAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val product = filteredProducts[position] // Utiliza la lista filtrada
+        val product = filteredProducts[position]
         holder.productName.text = product.product_name
         holder.productPrice.text = "${product.price} €"
         holder.productStock.text = "Stock: ${product.stock}"
@@ -53,21 +53,21 @@ class TiendaProductAdapter(
         }
     }
 
-    override fun getItemCount() = filteredProducts.size // Utiliza la lista filtrada
+    override fun getItemCount() = filteredProducts.size
 
     fun updateProducts(newProducts: List<Product>) {
         products = newProducts
-        filteredProducts = newProducts // Sin filtro inicial, muestra todos
+        filteredProducts = newProducts
         notifyDataSetChanged()
     }
 
     fun filter(query: String) {
         filteredProducts = if (query.isEmpty()) {
-            products // Sin filtro, muestra todos los productos
+            products
         } else {
             products.filter { it.product_name.contains(query, ignoreCase = true) } // Filtrar por nombre
         }
-        notifyDataSetChanged() // Actualiza la vista
+        notifyDataSetChanged()
     }
 }
 

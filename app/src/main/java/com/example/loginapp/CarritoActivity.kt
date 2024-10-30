@@ -36,7 +36,7 @@ class CarritoActivity : AppCompatActivity() {
         val checkoutButton: Button = findViewById(R.id.checkoutButton)
         val cancelButton: Button = findViewById(R.id.cancelButton)
 
-        loadCartFromStorage() // Cargar el carrito desde SharedPreferences al iniciar la actividad
+        loadCartFromStorage()
 
         cartAdapter = CarritoAdapter(
             cartProducts,
@@ -78,14 +78,14 @@ class CarritoActivity : AppCompatActivity() {
     private fun removeProduct(product: Product) {
         cartProducts.remove(product)
         updateCartAndUI()
-        saveCartToStorage() // Guardar cambios después de eliminar un producto
+        saveCartToStorage()
         Toast.makeText(this, "${product.product_name} eliminado del carrito", Toast.LENGTH_SHORT).show()
     }
 
     private fun updateCartAndUI() {
         cartAdapter.notifyDataSetChanged()
         updateTotalPrice()
-        saveCartToStorage() // Guardar cambios cada vez que se actualiza la UI
+        saveCartToStorage()
     }
 
     private fun updateTotalPrice() {
@@ -112,7 +112,7 @@ class CarritoActivity : AppCompatActivity() {
                 if (result) {
                     Toast.makeText(this@CarritoActivity, "Pedidos creados con éxito.", Toast.LENGTH_SHORT).show()
                     clearCart()
-                    setResult(Activity.RESULT_OK) // Notificar a la actividad anterior que se ha actualizado el carrito
+                    setResult(Activity.RESULT_OK)
                     finish()
                 } else {
                     Toast.makeText(this@CarritoActivity, "Error: No se pudieron crear los pedidos", Toast.LENGTH_SHORT).show()
@@ -161,7 +161,7 @@ class CarritoActivity : AppCompatActivity() {
     private fun clearCart() {
         cartProducts.clear()
         updateCartAndUI()
-        saveEmptyCartToStorage() // Limpiar el carrito en SharedPreferences también.
+        saveEmptyCartToStorage()
     }
 
     private fun loadCartFromStorage() {
@@ -175,7 +175,7 @@ class CarritoActivity : AppCompatActivity() {
             Log.d("CarritoActivity", "Productos cargados desde almacenamiento: ${cartProducts.size}")
         } else {
             Log.d("CarritoActivity", "No se encontraron productos en almacenamiento")
-            cartProducts.clear() // Asegurarse de que la lista esté vacía si no hay datos.
+            cartProducts.clear()
         }
     }
 

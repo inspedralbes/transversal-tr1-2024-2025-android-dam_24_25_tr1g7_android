@@ -24,7 +24,7 @@ interface ApiService {
     fun getProducts(): Call<List<Product>>
 
     @PUT("/updateUsuari")
-    fun updateUser(@QueryMap params: Map<String, String>): Call<Void>
+    fun updateUsuari(@QueryMap params: Map<String, String>): Call<Void>
 
     @POST("/orders")
     suspend fun createOrder(@Body order: Order): Response<Order>

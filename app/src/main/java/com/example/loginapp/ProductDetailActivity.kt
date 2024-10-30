@@ -41,7 +41,6 @@ class ProductDetailActivity : AppCompatActivity() {
             productPrice.text = "${it.price} €"
             productDescription.text = it.description
 
-            // Cargar la imagen utilizando Glide
             val imageUrl = "http://dam.inspedralbes.cat:21345/sources/Imatges/${it.image_file}"
             Glide.with(this)
                 .load(imageUrl)

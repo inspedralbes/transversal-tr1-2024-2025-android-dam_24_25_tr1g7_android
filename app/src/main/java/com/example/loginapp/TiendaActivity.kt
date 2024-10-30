@@ -140,10 +140,8 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         productAdapter.notifyDataSetChanged()
 
-        // Guardar el carrito actualizado en SharedPreferences
         saveCartToStorage()
 
-        // Actualizar el contador del carrito en la navegación
         updateCartItemCount()
     }
 
@@ -168,19 +166,18 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         if (!cartJson.isNullOrEmpty()) {
             val type = object : TypeToken<List<Product>>() {}.type
 
-            cartProducts.clear() // Limpiar la lista antes de cargar nuevos productos.
+            cartProducts.clear()
             cartProducts.addAll(Gson().fromJson(cartJson, type))
 
             Log.d("TiendaActivity", "Carrito cargado: ${cartProducts.size} productos")
 
-            updateCartItemCount() // Actualizar el contador de elementos en el menú.
+            updateCartItemCount()
 
-            // Si es necesario, puedes actualizar tu adaptador aquí.
             productAdapter.notifyDataSetChanged()
 
         } else {
             Log.d("TiendaActivity", "No se encontró carrito guardado")
-            cartProducts.clear() // Asegúrate de que la lista esté vacía si no hay datos.
+            cartProducts.clear()
         }
     }
 

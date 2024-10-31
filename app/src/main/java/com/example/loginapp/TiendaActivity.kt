@@ -6,11 +6,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.widget.SearchView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecte01.R
@@ -26,13 +28,14 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
     private lateinit var productAdapter: TiendaProductAdapter
-    private var cartProducts = mutableListOf<Product>() // Lista de productos en el carrito
+    private var cartProducts = mutableListOf<Product>()
+    private var allProducts = emptyList<Product>()
 
     override fun onResume() {
         super.onResume()
         cargarDetallesUsuarioMenu()
-        loadCartFromStorage() // Cargar el carrito cada vez que se reanuda la actividad
-        updateCartItemCount() // Actualizar el contador del carrito en el menú
+        loadCartFromStorage()
+        updateCartItemCount()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,12 +61,41 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
 
         val recyclerView: RecyclerView = findViewById(R.id.fullScreenRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        productAdapter = TiendaProductAdapter(emptyList(), this) { product ->
-            addToCart(product)
-        }
+        productAdapter = TiendaProductAdapter(
+            emptyList(),
+            this,
+            añadirEnCarrito = { product -> añadirEnCarrito(product) },
+            onProductClicked = { product -> mostrarDetallesProducto(product) }
+        )
         recyclerView.adapter = productAdapter
 
+        val dividerItemDecoration = DividerItemDecoration(recyclerView.context, LinearLayoutManager.VERTICAL)
+        recyclerView.addItemDecoration(dividerItemDecoration)
+
         loadProductsFromServer()
+
+        val searchView = findViewById<SearchView>(R.id.searchView)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    buscarProducto(query)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (newText != null) {
+                    buscarProducto(newText)
+                }
+                return true
+            }
+        })
+    }
+
+    private fun mostrarDetallesProducto(product: Product) {
+        val intent = Intent(this, DetalleProductoAcivity::class.java)
+        intent.putExtra("product", product)
+        startActivity(intent)
     }
 
     private fun cargarDetallesUsuarioMenu() {
@@ -104,6 +136,7 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
                 if (response.isSuccessful) {
                     val products = response.body() ?: emptyList()
+                    allProducts = products // Almacenar la lista completa para búsqueda
                     productAdapter.updateProducts(products)
                 } else {
                     Toast.makeText(this@TiendaActivity, "Error al cargar productos", Toast.LENGTH_SHORT).show()
@@ -116,7 +149,14 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         })
     }
 
-    private fun addToCart(product: Product) {
+    private fun buscarProducto(query: String) {
+        val productosFiltrados = allProducts.filter {
+            it.product_name.contains(query, ignoreCase = true)
+        }
+        productAdapter.updateProducts(productosFiltrados)
+    }
+
+    private fun añadirEnCarrito(product: Product) {
         val existingProduct = cartProducts.find { it.product_id == product.product_id }
 
         if (existingProduct == null) {
@@ -139,42 +179,31 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         }
 
         productAdapter.notifyDataSetChanged()
-
         saveCartToStorage()
-
         updateCartItemCount()
     }
 
     private fun saveCartToStorage() {
         val sharedPref = getSharedPreferences("CartPreferences", Context.MODE_PRIVATE)
-
         val cartJson = Gson().toJson(cartProducts)
-
         with(sharedPref.edit()) {
             putString("cart", cartJson)
             apply()
         }
-
         Log.d("TiendaActivity", "Carrito guardado: $cartJson")
     }
 
     private fun loadCartFromStorage() {
         val sharedPref = getSharedPreferences("CartPreferences", Context.MODE_PRIVATE)
-
         val cartJson = sharedPref.getString("cart", "")
 
         if (!cartJson.isNullOrEmpty()) {
             val type = object : TypeToken<List<Product>>() {}.type
-
             cartProducts.clear()
             cartProducts.addAll(Gson().fromJson(cartJson, type))
-
             Log.d("TiendaActivity", "Carrito cargado: ${cartProducts.size} productos")
-
             updateCartItemCount()
-
             productAdapter.notifyDataSetChanged()
-
         } else {
             Log.d("TiendaActivity", "No se encontró carrito guardado")
             cartProducts.clear()

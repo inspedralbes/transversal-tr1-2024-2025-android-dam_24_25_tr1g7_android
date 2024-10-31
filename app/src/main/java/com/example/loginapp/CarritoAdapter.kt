@@ -4,7 +4,7 @@ import Product
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -23,9 +23,9 @@ class CarritoAdapter(
         val productName: TextView = itemView.findViewById(R.id.cartProductName)
         val productPrice: TextView = itemView.findViewById(R.id.cartProductPrice)
         val productQuantity: TextView = itemView.findViewById(R.id.cartProductQuantity)
-        val increaseButton: Button = itemView.findViewById(R.id.increaseQuantityButton)
-        val decreaseButton: Button = itemView.findViewById(R.id.decreaseQuantityButton)
-        val removeButton: Button = itemView.findViewById(R.id.removeProductButton)
+        val increaseButton: ImageButton = itemView.findViewById(R.id.increaseQuantityButton)
+        val decreaseButton: ImageButton = itemView.findViewById(R.id.decreaseQuantityButton)
+        val removeButton: ImageButton = itemView.findViewById(R.id.removeProductButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {

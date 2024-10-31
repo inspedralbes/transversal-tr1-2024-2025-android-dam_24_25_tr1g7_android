@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -29,6 +30,9 @@ class CarritoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_carrito)
+
+        val toolbarBackButton = findViewById<ImageButton>(R.id.botonAtras)
+        toolbarBackButton.setOnClickListener { finish() }
 
         val recyclerView: RecyclerView = findViewById(R.id.cartRecyclerView)
         totalPriceTextView = findViewById(R.id.totalPriceTextView)
@@ -55,7 +59,6 @@ class CarritoActivity : AppCompatActivity() {
         checkoutButton.setOnClickListener { processCheckout() }
         cancelButton.setOnClickListener { finish() }
     }
-
     private fun updateProductQuantity(product: Product, increase: Boolean) {
         when {
             increase && product.quantityInCart < product.stock -> {
@@ -170,7 +173,7 @@ class CarritoActivity : AppCompatActivity() {
 
         if (!cartJson.isNullOrEmpty()) {
             val type = object : TypeToken<List<Product>>() {}.type
-            cartProducts.clear() // Limpiar la lista antes de cargar nuevos productos.
+            cartProducts.clear()
             cartProducts.addAll(Gson().fromJson(cartJson, type))
             Log.d("CarritoActivity", "Productos cargados desde almacenamiento: ${cartProducts.size}")
         } else {

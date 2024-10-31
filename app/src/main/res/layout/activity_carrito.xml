@@ -2,23 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@color/background_light"
     android:padding="16dp">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/cartToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/purple_200">
+        android:background="@color/green_dark"
+        android:elevation="4dp"
+        android:titleTextColor="@android:color/white">
+
+        <ImageButton
+            android:id="@+id/botonAtras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back"
+            app:tint="@android:color/white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tu carrito"
+            android:text="Tu Carrito"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:textStyle="bold" />
-
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginStart="40dp"/>
     </androidx.appcompat.widget.Toolbar>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -35,7 +50,8 @@
         android:layout_marginTop="16dp"
         android:text="Total: 0.00 €"
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="@color/green_dark" />
 
     <EditText
         android:id="@+id/pickupTimeEditText"
@@ -43,7 +59,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:hint="Indica la hora de recogida"
-        android:inputType="time" />
+        android:inputType="time"
+        android:background="@drawable/fondo_carrito_text"
+        android:padding="12dp"
+        android:textColor="@color/gray_dark"
+        android:textSize="16sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,7 +77,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Cancelar"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/gray_light"
+            android:textColor="@android:color/white"
+            android:padding="12dp"
+            android:elevation="4dp" />
 
         <Button
             android:id="@+id/checkoutButton"
@@ -65,8 +89,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Pagar"
-            android:layout_marginStart="8dp" />
-
+            android:layout_marginStart="8dp"
+            android:backgroundTint="@color/green_dark"
+            android:textColor="@android:color/white"
+            android:padding="12dp"
+            android:elevation="4dp" />
     </LinearLayout>
-
 </LinearLayout>

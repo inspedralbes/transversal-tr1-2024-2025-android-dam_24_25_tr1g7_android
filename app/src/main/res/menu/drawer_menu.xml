@@ -1,32 +1,38 @@
-<!-- res/menu/drawer_menu.xml -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item
-        android:id="@+id/nav_home"
-        android:title="Home"
-        android:icon="@drawable/baseline_home_24"/>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:title="Inicio"
+            android:icon="@drawable/baseline_home_24" />
 
-    <item
-        android:id="@+id/nav_perfil"
-        android:title="Perfil"
-        android:icon="@drawable/user_icono" />
+        <item
+            android:id="@+id/nav_perfil"
+            android:title="Perfil"
+            android:icon="@drawable/user_icono" />
+    </group>
 
-    <item
-        android:id="@+id/nav_mis_productos"
-        android:title="Mis Productos"
-        android:icon="@drawable/ic_products" />
-    <item
-        android:id="@+id/nav_mis_pedidos"
-        android:title="Mis Pedidos"
-        android:icon="@drawable/ic_products" />
 
-    <item
-        android:id="@+id/nav_cart"
-        android:title="Mi Carrito"
-        android:icon="@drawable/ic_cart" />
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_mis_productos"
+            android:title="Mis Productos"
+            android:icon="@drawable/ic_products" />
+
+        <item
+            android:id="@+id/nav_mis_pedidos"
+            android:title="Mis Pedidos"
+            android:icon="@drawable/ic_mis_pedidos" />
+
+        <item
+            android:id="@+id/nav_cart"
+            android:title="Mi Carrito"
+            android:icon="@drawable/ic_cart" />
+    </group>
+
     <item
         android:id="@+id/nav_logout"
         android:title="Cerrar sesión"
-        android:icon="@drawable/logout_icon" />
-
+        android:icon="@drawable/ic_logout"
+        android:layout_marginTop="8dp" />
 </menu>

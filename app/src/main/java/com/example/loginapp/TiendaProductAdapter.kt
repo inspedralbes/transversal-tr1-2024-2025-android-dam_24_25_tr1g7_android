@@ -16,7 +16,8 @@ import com.example.proyecte01.R
 class TiendaProductAdapter(
     private var products: List<Product>,
     private val context: Context,
-    private val onAddToCartClicked: (Product) -> Unit
+    private val añadirEnCarrito: (Product) -> Unit,
+    private val onProductClicked: (Product) -> Unit
 ) : RecyclerView.Adapter<TiendaProductAdapter.ViewHolder>() {
 
     private var filteredProducts: List<Product> = products
@@ -46,10 +47,14 @@ class TiendaProductAdapter(
 
         holder.addToCartButton.setOnClickListener {
             if (product.quantityInCart < product.stock) {
-                onAddToCartClicked(product)
+                añadirEnCarrito(product)
             } else {
                 Toast.makeText(context, "No hay más stock disponible de ${product.product_name}", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        holder.itemView.setOnClickListener {
+            onProductClicked(product)
         }
     }
 
@@ -70,4 +75,5 @@ class TiendaProductAdapter(
         notifyDataSetChanged()
     }
 }
+
 

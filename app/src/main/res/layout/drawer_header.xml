@@ -1,32 +1,39 @@
-<!-- res/layout/drawer_header.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="200dp"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/colorPrimary"
-    android:gravity="bottom">
+    android:gravity="center"
+    android:background="@drawable/menu_fondo_degradado">
 
     <ImageView
         android:id="@+id/profile_image"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@drawable/user_icono"
         android:layout_gravity="center"
-        android:contentDescription="Profile Picture" />
+        android:background="@drawable/circle_background"
+        android:padding="4dp"
+        android:contentDescription="Foto de perfil"
+        android:elevation="6dp" />
 
     <TextView
         android:id="@+id/user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
-        android:paddingTop="8dp"
-        android:gravity="center" />
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:paddingTop="12dp"
+        android:gravity="center"
+        android:text="Nombre de usuario" />
 
     <TextView
         android:id="@+id/user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@android:color/white"
-        android:gravity="center" />
+        android:textSize="14sp"
+        android:gravity="center"
+        android:text="email@ejemplo.com" />
 </LinearLayout>

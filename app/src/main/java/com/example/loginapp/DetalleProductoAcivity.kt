@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.proyecte01.R
 
-class ProductDetailActivity : AppCompatActivity() {
+class DetalleProductoAcivity : AppCompatActivity() {
 
     private lateinit var backButton: ImageButton
     private lateinit var productName: TextView

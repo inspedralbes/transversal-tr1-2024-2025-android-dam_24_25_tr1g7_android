@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import com.example.proyecte01.R
 
@@ -14,7 +15,7 @@ class PerfilActivity : AppCompatActivity() {
     private lateinit var firstNameEditText: EditText
     private lateinit var lastNameEditText: EditText
     private lateinit var passwordEditText: EditText
-    private lateinit var backButton: Button
+    private lateinit var backButton: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +31,7 @@ class PerfilActivity : AppCompatActivity() {
         loadUserProfile()
 
         backButton.setOnClickListener {
-            finish()
+            onBackPressed()
         }
     }
 

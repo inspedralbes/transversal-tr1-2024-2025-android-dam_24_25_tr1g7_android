@@ -3,67 +3,89 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    android:background="@drawable/fondo_carro"
+    android:elevation="2dp"
+    android:layout_marginBottom="8dp">
 
     <ImageView
         android:id="@+id/cartProductImage"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:background="@drawable/circle_background"
+        android:padding="4dp"
+        android:elevation="3dp" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:orientation="vertical"
-        android:layout_marginStart="8dp">
+        android:layout_marginStart="12dp">
 
         <TextView
             android:id="@+id/cartProductName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="@color/green_dark"
+            android:maxLines="1"
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/cartProductPrice"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/gray_dark"
+            android:layout_marginTop="4dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:gravity="center_vertical">
 
-            <Button
+            <ImageButton
                 android:id="@+id/decreaseQuantityButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:text="-" />
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_remove"
+                android:backgroundTint="@color/green_pastel"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Disminuir cantidad" />
 
             <TextView
                 android:id="@+id/cartProductQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:textSize="16sp" />
+                android:layout_marginHorizontal="12dp"
+                android:textSize="16sp"
+                android:textColor="@color/gray_dark"
+                android:text="1" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/increaseQuantityButton"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:text="+" />
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_add"
+                android:backgroundTint="@color/green_pastel"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Aumentar cantidad" />
 
         </LinearLayout>
-
     </LinearLayout>
-
-    <Button
+    <ImageButton
         android:id="@+id/removeProductButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Eliminar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_delete"
+        android:backgroundTint="@color/red_600"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Eliminar producto"
         android:layout_gravity="center_vertical" />
 
 </LinearLayout>

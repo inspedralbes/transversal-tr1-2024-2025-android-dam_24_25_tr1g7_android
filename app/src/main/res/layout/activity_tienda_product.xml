@@ -1,11 +1,10 @@
-<!-- res/layout/activity_fullscreen_product.xml -->
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:background="@color/background_light">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,24 +14,29 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
-            android:title="Productos"
-            android:titleTextColor="@android:color/white" />
+            android:background="@color/green_dark"
+            app:titleTextColor="@android:color/white"
+            android:elevation="4dp">
 
+            <android.widget.SearchView
+                android:id="@+id/searchView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:queryHint="Buscar productos"
+                android:iconifiedByDefault="false"
+                android:background="@drawable/buscador"
+                android:layout_gravity="end"
+                android:layout_marginEnd="16dp"
+                android:padding="8dp"
+                android:elevation="4dp" />
+        </androidx.appcompat.widget.Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fullScreenRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/toolbar" />
-        <SearchView
-            android:id="@+id/searchView"
-            android:layout_marginLeft="45dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:iconifiedByDefault="false"
-            android:queryHint="Buscar productos" />
-
+            android:layout_below="@id/toolbar"
+            android:padding="8dp" />
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -40,7 +44,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@android:color/white"
+        android:background="@color/white"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer_menu" />
+        app:menu="@menu/drawer_menu"
+        app:itemTextColor="@color/gray_dark"
+        app:itemIconTint="@color/green_dark" />
 </androidx.drawerlayout.widget.DrawerLayout>

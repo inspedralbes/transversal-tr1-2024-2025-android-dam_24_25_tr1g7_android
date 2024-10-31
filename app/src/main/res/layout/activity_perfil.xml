@@ -1,103 +1,156 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/white">
+    android:background="@color/background_light">
 
-    <ImageView
-        android:id="@+id/profileImage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/user_icono"
-        android:layout_marginTop="16dp"
-        android:layout_gravity="center"
-        android:contentDescription="Foto de perfil" />
-
-    <com.google.android.material.textfield.TextInputLayout
+    <!-- Encabezado -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Nombre de Usuario">
+        android:layout_height="230dp"
+        android:background="@color/green_dark">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/usernameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:drawableStart="@android:drawable/ic_menu_myplaces" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_back"
+            android:contentDescription="@string/back"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_margin="16dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            app:tint="@android:color/white" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Correo Electrónico">
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/user_icono"
+            android:contentDescription="Foto de perfil"
+            android:background="@drawable/circle_background"
+            android:elevation="4dp"
+            android:padding="8dp" />
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emailEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:drawableStart="@android:drawable/ic_dialog_email" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nombre">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/firstNameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Apellido">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/lastNameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña"
-        android:icon="@drawable/ic_password">
-
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/passwordEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPassword"
-            android:enabled="false"
-            android:icon="@drawable/ic_password"/>
-    </com.google.android.material.textfield.TextInputLayout>
+        <ImageButton
+            android:id="@+id/editProfileImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignBottom="@id/profileImage"
+            android:layout_marginStart="57dp"
+            android:layout_marginBottom="-47dp"
+            android:layout_toEndOf="@id/profileImage"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:backgroundTint="@color/white"
+            android:contentDescription="Editar foto de perfil"
+            android:elevation="6dp"
+            app:tint="@color/green_dark" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_marginTop="25dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="16dp">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <Button
-            android:id="@+id/backButton"
-            android:layout_width="0dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="8dp"
-            android:text="Atrás"
-            android:backgroundTint="@color/colorAccent"
-            android:textColor="@android:color/white" />
+            android:hint="Nombre de Usuario"
+            app:startIconDrawable="@drawable/ic_user"
+            app:startIconTint="@color/green_dark"
+            app:boxStrokeColor="@color/green_dark"
+            app:hintTextColor="@color/gray_light"
+            android:layout_marginBottom="15dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/usernameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:layout_marginBottom="15dp"
+                android:textColor="@color/gray_dark" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre"
+            app:startIconDrawable="@drawable/ic_user"
+            app:startIconTint="@color/green_dark"
+            app:boxStrokeColor="@color/green_dark"
+            app:hintTextColor="@color/gray_light"
+            android:layout_marginBottom="8dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/firstNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:inputType="textPersonName"
+                android:textColor="@color/gray_dark" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Apellido"
+            app:startIconDrawable="@drawable/ic_user"
+            app:startIconTint="@color/green_dark"
+            app:boxStrokeColor="@color/green_dark"
+            app:hintTextColor="@color/gray_light"
+            android:layout_marginBottom="15dp">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Correo Electrónico"
+                app:startIconDrawable="@drawable/ic_email"
+                app:startIconTint="@color/green_dark"
+                app:boxStrokeColor="@color/green_dark"
+                app:hintTextColor="@color/gray_light"
+                android:layout_marginTop="15dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/emailEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/gray_dark" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lastNameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:layout_marginBottom="10dp"
+                android:textColor="@color/gray_dark" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contraseña"
+            app:startIconDrawable="@drawable/ic_password"
+            app:startIconTint="@color/green_dark"
+            app:boxStrokeColor="@color/green_dark"
+            app:hintTextColor="@color/gray_light"
+            android:layout_marginTop="10dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="@color/gray_dark" />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
 </LinearLayout>

@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_light">
 
     <ImageButton
         android:id="@+id/backButton"
@@ -10,23 +11,32 @@
         android:layout_height="48dp"
         android:src="@drawable/ic_back"
         android:contentDescription="@string/back"
-        android:background="?attr/selectableItemBackground"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:layout_alignParentStart="true"
-        android:layout_margin="8dp"/>
+        android:layout_margin="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        app:tint="@color/green_dark" />
 
     <SearchView
         android:id="@+id/searchView"
-        android:layout_marginLeft="45dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/backButton"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:queryHint="Buscar productos"
+        android:background="@color/white"
         android:iconifiedByDefault="false"
-        android:queryHint="Buscar productos" />
+        android:layout_marginLeft="8dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_below="@id/searchView"
+        android:layout_alignParentBottom="true"
         android:padding="8dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,5 +49,5 @@
         android:src="@drawable/ic_cart"
         android:contentDescription="@string/cart"
         android:tint="@android:color/white"
-        app:backgroundTint="@color/colorAccent" />
+        app:backgroundTint="@color/green_pastel" />
 </RelativeLayout>

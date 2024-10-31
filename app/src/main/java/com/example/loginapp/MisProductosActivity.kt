@@ -120,7 +120,7 @@ class MisProductosActivity : AppCompatActivity() {
     }
 
     private fun openProductDetail(product: Product) {
-        val intent = Intent(this, ProductDetailActivity::class.java)
+        val intent = Intent(this, DetalleProductoAcivity::class.java)
         intent.putExtra("product", product)
         startActivity(intent)
     }

@@ -24,7 +24,6 @@
                 android:layout_height="wrap_content"
                 android:queryHint="Buscar productos"
                 android:iconifiedByDefault="false"
-                android:background="@drawable/buscador"
                 android:layout_gravity="end"
                 android:layout_marginEnd="16dp"
                 android:padding="8dp"

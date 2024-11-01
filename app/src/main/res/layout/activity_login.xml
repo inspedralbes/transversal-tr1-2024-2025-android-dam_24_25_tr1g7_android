@@ -1,7 +1,7 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="24dp"
     android:background="@color/background_light"
@@ -21,6 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:hint="Username"
+        app:startIconDrawable="@drawable/ic_user"
+        app:startIconTint="@color/green_dark"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -35,6 +37,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:hint="Password"
+        app:startIconDrawable="@drawable/ic_password"
+        app:startIconTint="@color/green_dark"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText

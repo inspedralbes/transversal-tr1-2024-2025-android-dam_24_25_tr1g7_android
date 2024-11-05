@@ -2,6 +2,8 @@ package com.example.loginapp
 
 import Order
 import Product
+import ProductCreateRequest
+import ProductUpdateRequest
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -10,6 +12,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
@@ -65,4 +68,13 @@ interface ApiService {
 
     @PUT("/canceled")
     suspend fun setCanceledStatus(@Query("order_id") orderId: Int): Response<Void>
+
+    @POST("/createProducte")
+    fun createProduct(@Body product: ProductCreateRequest): Call<Product>
+
+    @DELETE("/deleteProducte/{productId}")
+    fun deleteProduct(@Path("productId") productId: Int): Call<Void>
+
+    @PUT("/updateProducte")
+    fun updateProduct(@Body product: ProductUpdateRequest): Call<Product>
 }

@@ -10,7 +10,8 @@ data class Product(
     val stock: Int,
     val image_file: String,
     val active: Int,
-    var quantityInCart: Int = 0
+    var quantityInCart: Int = 0,
+    val ownerId: Int
 ) : Parcelable {
     fun isActive(): Boolean {
         return active == 1

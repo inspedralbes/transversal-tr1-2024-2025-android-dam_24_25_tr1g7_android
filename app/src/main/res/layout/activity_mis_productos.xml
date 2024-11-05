@@ -40,13 +40,13 @@
         android:padding="8dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/cartFab"
+        android:id="@+id/addProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_cart"
+        android:src="@drawable/ic_add"
         android:contentDescription="@string/cart"
         android:tint="@android:color/white"
         app:backgroundTint="@color/green_pastel" />

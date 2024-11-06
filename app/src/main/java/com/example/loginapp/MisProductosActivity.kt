@@ -106,6 +106,7 @@ class MisProductosActivity : AppCompatActivity() {
 
         val nameEditText = dialogView.findViewById<EditText>(R.id.productNameEditText)
         val descriptionEditText = dialogView.findViewById<EditText>(R.id.productDescriptionEditText)
+        val materialEditText = dialogView.findViewById<EditText>(R.id.productMaterialEditText)
         val priceEditText = dialogView.findViewById<EditText>(R.id.productPriceEditText)
         val stockEditText = dialogView.findViewById<EditText>(R.id.productStockEditText)
         val imageUrlEditText = dialogView.findViewById<EditText>(R.id.productImageUrlEditText)
@@ -114,9 +115,11 @@ class MisProductosActivity : AppCompatActivity() {
             val newProduct = ProductCreateRequest(
                 product_name = nameEditText.text.toString(),
                 description = descriptionEditText.text.toString(),
+                material = materialEditText.text.toString(),
                 price = priceEditText.text.toString().toDoubleOrNull() ?: 0.0,
                 stock = stockEditText.text.toString().toIntOrNull() ?: 0,
-                image_file = imageUrlEditText.text.toString()
+                image_file = imageUrlEditText.text.toString(),
+                ownerId = getUserId()
             )
             addProductToDatabase(newProduct)
         }
@@ -150,12 +153,14 @@ class MisProductosActivity : AppCompatActivity() {
 
         val nameEditText = dialogView.findViewById<EditText>(R.id.editProductNameEditText)
         val descriptionEditText = dialogView.findViewById<EditText>(R.id.editProductDescriptionEditText)
+        val materialEditText = dialogView.findViewById<EditText>(R.id.editProductMaterialEditText)
         val priceEditText = dialogView.findViewById<EditText>(R.id.editProductPriceEditText)
         val stockEditText = dialogView.findViewById<EditText>(R.id.editProductStockEditText)
         val imageUrlEditText = dialogView.findViewById<EditText>(R.id.editProductImageUrlEditText)
 
         nameEditText.setText(product.product_name)
         descriptionEditText.setText(product.description)
+        materialEditText.setText(product.material)
         priceEditText.setText(product.price.toString())
         stockEditText.setText(product.stock.toString())
         imageUrlEditText.setText(product.image_file)
@@ -165,9 +170,11 @@ class MisProductosActivity : AppCompatActivity() {
                 product_id = product.product_id,
                 product_name = nameEditText.text.toString(),
                 description = descriptionEditText.text.toString(),
+                material = materialEditText.text.toString(),
                 price = priceEditText.text.toString().toDoubleOrNull() ?: 0.0,
                 stock = stockEditText.text.toString().toIntOrNull() ?: 0,
-                image_file = imageUrlEditText.text.toString()
+                image_file = imageUrlEditText.text.toString(),
+                ownerId = product.ownerId
             )
             updateProductInDatabase(updatedProduct)
         }

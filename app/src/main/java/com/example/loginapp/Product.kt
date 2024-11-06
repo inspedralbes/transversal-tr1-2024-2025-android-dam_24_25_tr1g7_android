@@ -8,6 +8,7 @@ data class Product(
     val description: String,
     val price: Double,
     val stock: Int,
+    val material: String,
     val image_file: String,
     val active: Int,
     var quantityInCart: Int = 0,

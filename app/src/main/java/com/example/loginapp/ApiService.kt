@@ -72,8 +72,10 @@ interface ApiService {
     @POST("/createProducte")
     fun createProduct(@Body product: ProductCreateRequest): Call<Product>
 
-    @DELETE("/deleteProducte/{productId}")
-    fun deleteProduct(@Path("productId") productId: Int): Call<Void>
+
+        @DELETE("deleteProducte")
+        fun deleteProduct(@Query("product_id") productId: Int): Call<Void>
+
 
     @PUT("/updateProducte")
     fun updateProduct(@Body product: ProductUpdateRequest): Call<Product>

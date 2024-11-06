@@ -47,7 +47,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:src="@drawable/ic_add"
-        android:contentDescription="@string/cart"
+        android:contentDescription="@string/add"
         android:tint="@android:color/white"
         app:backgroundTint="@color/green_pastel" />
 </RelativeLayout>

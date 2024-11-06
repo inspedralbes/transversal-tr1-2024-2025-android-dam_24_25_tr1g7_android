@@ -6,6 +6,7 @@ import ProductUpdateRequest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.SearchView
@@ -26,8 +27,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class MisProductosActivity : AppCompatActivity() {
 
+
+
     private lateinit var recyclerView: RecyclerView
-    private lateinit var productAdapter: ProductAdapter
+    private lateinit var misProductosAdapter: MisProductosAdapter
     private lateinit var searchView: SearchView
     private lateinit var apiService: ApiService
     private lateinit var backButton: ImageButton
@@ -59,7 +62,7 @@ class MisProductosActivity : AppCompatActivity() {
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean = false
             override fun onQueryTextChange(newText: String?): Boolean {
-                productAdapter.filter(newText ?: "")
+                misProductosAdapter.filter(newText ?: "")
                 return true
             }
         })
@@ -67,13 +70,12 @@ class MisProductosActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
-        productAdapter = ProductAdapter(
+        misProductosAdapter = MisProductosAdapter(
             listOf(),
-            { product -> openProductDetail(product) },
-            true,
-            { product -> editProduct(product) }
+            { product -> editProduct(product) },
+            { product -> showDeleteConfirmationDialog(product.product_id) }
         )
-        recyclerView.adapter = productAdapter
+        recyclerView.adapter = misProductosAdapter
     }
 
     private fun setupApiService() {
@@ -81,13 +83,17 @@ class MisProductosActivity : AppCompatActivity() {
     }
 
     private fun loadProductsFromServer() {
+        val userId = getUserId()
         apiService.getProducts().enqueue(object : Callback<List<Product>> {
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
                 if (response.isSuccessful) {
                     val allProducts = response.body() ?: listOf()
-                    val userId = getUserId()
-                    val userProducts = allProducts.filter { it.ownerId == userId }
-                    productAdapter.updateProducts(userProducts)
+                    val userProducts = allProducts.filter { it.owner_id == userId }
+                    misProductosAdapter.updateProducts(userProducts)
+
+                    // Log para depuración
+                    Log.d("MisProductos", "Productos cargados: ${userProducts.size} de ${allProducts.size}")
+                    Log.d("MisProductos", "User ID: $userId")
                 } else {
                     Toast.makeText(this@MisProductosActivity, "Error al cargar productos", Toast.LENGTH_SHORT).show()
                 }
@@ -119,7 +125,7 @@ class MisProductosActivity : AppCompatActivity() {
                 price = priceEditText.text.toString().toDoubleOrNull() ?: 0.0,
                 stock = stockEditText.text.toString().toIntOrNull() ?: 0,
                 image_file = imageUrlEditText.text.toString(),
-                ownerId = getUserId()
+                owner_id = getUserId()
             )
             addProductToDatabase(newProduct)
         }
@@ -132,20 +138,26 @@ class MisProductosActivity : AppCompatActivity() {
         apiService.createProduct(product).enqueue(object : Callback<Product> {
             override fun onResponse(call: Call<Product>, response: Response<Product>) {
                 if (response.isSuccessful) {
-                    Toast.makeText(this@MisProductosActivity, "Producto añadido con éxito", Toast.LENGTH_SHORT).show()
-                    loadProductsFromServer()
+                    val newProduct = response.body()
+                    if (newProduct != null) {
+                        Toast.makeText(this@MisProductosActivity, "Producto añadido con éxito", Toast.LENGTH_SHORT).show()
+                        loadProductsFromServer() // Recarga la lista de productos
+                    } else {
+                        Log.e("MisProductos", "Respuesta exitosa pero cuerpo nulo")
+                        Toast.makeText(this@MisProductosActivity, "Error: Respuesta vacía del servidor", Toast.LENGTH_LONG).show()
+                    }
                 } else {
                     val errorBody = response.errorBody()?.string()
-                    Toast.makeText(this@MisProductosActivity, "Error al añadir el producto: $errorBody", Toast.LENGTH_LONG).show()
+                    Log.e("MisProductos", "Error en la respuesta: ${response.code()}, Body: $errorBody")
+                    Toast.makeText(this@MisProductosActivity, "Error al añadir el producto: ${response.code()}", Toast.LENGTH_LONG).show()
                 }
             }
 
             override fun onFailure(call: Call<Product>, t: Throwable) {
-                Toast.makeText(this@MisProductosActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
+                loadProductsFromServer()
             }
         })
     }
-
     private fun editProduct(product: Product) {
         val dialog = AlertDialog.Builder(this)
         val dialogView = layoutInflater.inflate(R.layout.dialog_edit_product, null)
@@ -174,7 +186,7 @@ class MisProductosActivity : AppCompatActivity() {
                 price = priceEditText.text.toString().toDoubleOrNull() ?: 0.0,
                 stock = stockEditText.text.toString().toIntOrNull() ?: 0,
                 image_file = imageUrlEditText.text.toString(),
-                ownerId = product.ownerId
+                owner_id = product.owner_id
             )
             updateProductInDatabase(updatedProduct)
         }
@@ -201,7 +213,7 @@ class MisProductosActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Product>, t: Throwable) {
-                Toast.makeText(this@MisProductosActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
+                loadProductsFromServer()
             }
         })
     }
@@ -230,7 +242,7 @@ class MisProductosActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Void>, t: Throwable) {
-                Toast.makeText(this@MisProductosActivity, "Error de red: ${t.message}", Toast.LENGTH_SHORT).show()
+                loadProductsFromServer()
             }
         })
     }

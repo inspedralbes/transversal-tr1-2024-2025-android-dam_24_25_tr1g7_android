@@ -6,5 +6,5 @@ data class ProductUpdateRequest(
     val price: Double,
     val stock: Int,
     val image_file: String,
-    val ownerId: Int
+    val owner_id: Int
 )

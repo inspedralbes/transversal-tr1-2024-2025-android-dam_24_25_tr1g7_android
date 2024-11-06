@@ -3,6 +3,7 @@ package com.example.loginapp
 import Product
 import ProductCreateRequest
 import ProductUpdateRequest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -20,8 +21,17 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.provider.MediaStore
+import android.util.Base64
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.gson.Gson
+import java.io.ByteArrayOutputStream
 
 
 
@@ -34,7 +44,21 @@ class MisProductosActivity : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private lateinit var apiService: ApiService
     private lateinit var backButton: ImageButton
+    private lateinit var imageBase64: String
+    private lateinit var imagePreview: ImageView
 
+    private val getContent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val data: Intent? = result.data
+            val imageBitmap = data?.extras?.get("data") as? Bitmap
+            if (imageBitmap != null) {
+                imagePreview.setImageBitmap(imageBitmap)
+                imagePreview.visibility = View.VISIBLE
+                imageBase64 = convertBitmapToBase64(imageBitmap)
+                Log.d("string_image", imageBase64)
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mis_productos)
@@ -53,7 +77,6 @@ class MisProductosActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
-
     private fun initializeViews() {
         searchView = findViewById(R.id.searchView)
         recyclerView = findViewById(R.id.recyclerView)
@@ -115,7 +138,13 @@ class MisProductosActivity : AppCompatActivity() {
         val materialEditText = dialogView.findViewById<EditText>(R.id.productMaterialEditText)
         val priceEditText = dialogView.findViewById<EditText>(R.id.productPriceEditText)
         val stockEditText = dialogView.findViewById<EditText>(R.id.productStockEditText)
-        val imageUrlEditText = dialogView.findViewById<EditText>(R.id.productImageUrlEditText)
+        val buttonSelectImage = dialogView.findViewById<Button>(R.id.buttonSelectImage)
+        imagePreview = dialogView.findViewById(R.id.imagePreview)
+
+        buttonSelectImage.setOnClickListener {
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            getContent.launch(takePictureIntent)
+        }
 
         dialog.setPositiveButton("Añadir") { _, _ ->
             val newProduct = ProductCreateRequest(
@@ -124,36 +153,39 @@ class MisProductosActivity : AppCompatActivity() {
                 material = materialEditText.text.toString(),
                 price = priceEditText.text.toString().toDoubleOrNull() ?: 0.0,
                 stock = stockEditText.text.toString().toIntOrNull() ?: 0,
-                image_file = imageUrlEditText.text.toString(),
+                image_file = imageBase64, // Usar la imagen en Base64
                 owner_id = getUserId()
             )
             addProductToDatabase(newProduct)
+            Log.d("image_file", newProduct.image_file)
         }
 
         dialog.setNegativeButton("Cancelar", null)
         dialog.show()
     }
 
+    private fun convertBitmapToBase64(bitmap: Bitmap): String {
+        val outputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        val byteArray = outputStream.toByteArray()
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
     private fun addProductToDatabase(product: ProductCreateRequest) {
         apiService.createProduct(product).enqueue(object : Callback<Product> {
             override fun onResponse(call: Call<Product>, response: Response<Product>) {
                 if (response.isSuccessful) {
-                    val newProduct = response.body()
-                    if (newProduct != null) {
-                        Toast.makeText(this@MisProductosActivity, "Producto añadido con éxito", Toast.LENGTH_SHORT).show()
-                        loadProductsFromServer() // Recarga la lista de productos
-                    } else {
-                        Log.e("MisProductos", "Respuesta exitosa pero cuerpo nulo")
-                        Toast.makeText(this@MisProductosActivity, "Error: Respuesta vacía del servidor", Toast.LENGTH_LONG).show()
-                    }
+                    Toast.makeText(this@MisProductosActivity, "Producto añadido con éxito", Toast.LENGTH_SHORT).show()
+                    loadProductsFromServer()
+                    Log.d("ProductUpload", "Sending product: ${Gson().toJson(product)}")
                 } else {
-                    val errorBody = response.errorBody()?.string()
-                    Log.e("MisProductos", "Error en la respuesta: ${response.code()}, Body: $errorBody")
-                    Toast.makeText(this@MisProductosActivity, "Error al añadir el producto: ${response.code()}", Toast.LENGTH_LONG).show()
+                    Log.d("ProductUpload", "Sending product: ${Gson().toJson(product)}")
+                    Toast.makeText(this@MisProductosActivity, "Error al añadir el producto", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<Product>, t: Throwable) {
+                Log.d("ProductUpload", "Sending product: ${Gson().toJson(product)}")
                 loadProductsFromServer()
             }
         })
@@ -168,14 +200,29 @@ class MisProductosActivity : AppCompatActivity() {
         val materialEditText = dialogView.findViewById<EditText>(R.id.editProductMaterialEditText)
         val priceEditText = dialogView.findViewById<EditText>(R.id.editProductPriceEditText)
         val stockEditText = dialogView.findViewById<EditText>(R.id.editProductStockEditText)
-        val imageUrlEditText = dialogView.findViewById<EditText>(R.id.editProductImageUrlEditText)
+        val buttonSelectImage = dialogView.findViewById<Button>(R.id.buttonEditSelectImage)
+        val imagePreview = dialogView.findViewById<ImageView>(R.id.editImagePreview)
+
 
         nameEditText.setText(product.product_name)
         descriptionEditText.setText(product.description)
         materialEditText.setText(product.material)
         priceEditText.setText(product.price.toString())
         stockEditText.setText(product.stock.toString())
-        imageUrlEditText.setText(product.image_file)
+
+
+        if (product.image_file.isNotEmpty()) {
+
+            val decodedString = Base64.decode(product.image_file, Base64.DEFAULT)
+            val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+            imagePreview.setImageBitmap(decodedByte)
+            imagePreview.visibility = View.VISIBLE
+        }
+
+        buttonSelectImage.setOnClickListener {
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            getContent.launch(takePictureIntent)
+        }
 
         dialog.setPositiveButton("Actualizar") { _, _ ->
             val updatedProduct = ProductUpdateRequest(
@@ -185,7 +232,7 @@ class MisProductosActivity : AppCompatActivity() {
                 material = materialEditText.text.toString(),
                 price = priceEditText.text.toString().toDoubleOrNull() ?: 0.0,
                 stock = stockEditText.text.toString().toIntOrNull() ?: 0,
-                image_file = imageUrlEditText.text.toString(),
+                image_file = imageBase64, // Use the updated Base64 string
                 owner_id = product.owner_id
             )
             updateProductInDatabase(updatedProduct)
@@ -217,6 +264,8 @@ class MisProductosActivity : AppCompatActivity() {
             }
         })
     }
+
+
 
     private fun showDeleteConfirmationDialog(productId: Int) {
         AlertDialog.Builder(this)

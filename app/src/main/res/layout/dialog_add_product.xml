@@ -1,50 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/productNameEditText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre del producto"
-        android:inputType="text" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <EditText
-        android:id="@+id/productDescriptionEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Descripción"
-        android:inputType="textMultiLine" />
+        <EditText
+            android:id="@+id/productNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nombre del producto"
+            android:inputType="text"
+            android:layout_marginBottom="8dp"/>
 
-    <EditText
-        android:id="@+id/productMaterialEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Material"
-        android:inputType="text" />
+        <EditText
+            android:id="@+id/productDescriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Descripción"
+            android:inputType="textMultiLine"
+            android:layout_marginBottom="8dp"/>
 
-    <EditText
-        android:id="@+id/productPriceEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Precio"
-        android:inputType="numberDecimal" />
+        <EditText
+            android:id="@+id/productMaterialEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Material"
+            android:inputType="text"
+            android:layout_marginBottom="8dp"/>
 
-    <EditText
-        android:id="@+id/productStockEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Stock"
-        android:inputType="number" />
+        <EditText
+            android:id="@+id/productPriceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Precio"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="8dp"/>
 
-    <EditText
-        android:id="@+id/productImageUrlEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="URL de la imagen"
-        android:inputType="textUri" />
+        <EditText
+            android:id="@+id/productStockEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Stock"
+            android:inputType="number"
+            android:layout_marginBottom="16dp"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/buttonSelectImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Seleccionar imagen"
+            android:layout_marginBottom="16dp"/>
+
+        <ImageView
+            android:id="@+id/imagePreview"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone"
+            android:contentDescription="Vista previa de la imagen"
+            android:layout_marginBottom="16dp"/>
+
+    </LinearLayout>
+</ScrollView>

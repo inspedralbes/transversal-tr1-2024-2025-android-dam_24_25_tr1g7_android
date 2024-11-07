@@ -1,4 +1,4 @@
-package com.example.loginapp
+package com.example.projecte01
 
 import Order
 import Product
@@ -12,7 +12,6 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
-import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 

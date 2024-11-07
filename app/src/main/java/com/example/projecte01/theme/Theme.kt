@@ -1,4 +1,4 @@
-package com.example.loginapp.theme
+package com.example.projecte01.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme

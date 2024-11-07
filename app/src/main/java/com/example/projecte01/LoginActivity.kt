@@ -1,4 +1,4 @@
-package com.example.loginapp
+package com.example.projecte01
 
 import android.content.Context
 import android.content.Intent

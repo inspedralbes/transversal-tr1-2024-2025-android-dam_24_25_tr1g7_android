@@ -19,18 +19,19 @@
 
         <activity
             android:exported="true"
-            android:name="com.example.loginapp.LoginActivity">
+            android:name="com.example.projecte01.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.loginapp.PerfilActivity" />
-        <activity android:name="com.example.loginapp.RegisterActivity"/>
-        <activity android:name="com.example.loginapp.MisProductosActivity"/>
-        <activity android:name="com.example.loginapp.DetalleProductoAcivity"/>
-        <activity android:name="com.example.loginapp.CarritoActivity"/>
-        <activity android:name="com.example.loginapp.TiendaActivity" />
+        <activity android:name="com.example.projecte01.PerfilActivity" />
+        <activity android:name="com.example.projecte01.RegisterActivity"/>
+        <activity android:name="com.example.projecte01.MisProductosActivity"/>
+        <activity android:name="com.example.projecte01.DetalleProductoAcivity"/>
+        <activity android:name="com.example.projecte01.CarritoActivity"/>
+        <activity android:name="com.example.projecte01.TiendaActivity" />
+        <activity android:name="com.example.projecte01.MisPedidosActivity" />
 
     </application>
 

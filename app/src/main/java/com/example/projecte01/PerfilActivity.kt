@@ -1,8 +1,7 @@
-package com.example.loginapp
+package com.example.projecte01
 
 import android.content.Context
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity

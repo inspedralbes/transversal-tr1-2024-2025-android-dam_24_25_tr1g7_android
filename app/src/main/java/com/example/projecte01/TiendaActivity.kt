@@ -113,7 +113,7 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             R.id.nav_home -> startActivity(Intent(this, TiendaActivity::class.java))
             R.id.nav_perfil -> startActivity(Intent(this, PerfilActivity::class.java))
             R.id.nav_mis_productos -> startActivity(Intent(this, MisProductosActivity::class.java))
-            R.id.nav_mis_pedidos -> startActivity(Intent(this, MisProductosActivity::class.java))
+            R.id.nav_mis_pedidos -> startActivity(Intent(this, MisPedidosActivity::class.java))
             R.id.nav_cart -> startActivity(Intent(this, CarritoActivity::class.java))
             R.id.nav_logout -> logout()
         }
@@ -136,7 +136,7 @@ class TiendaActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
             override fun onResponse(call: Call<List<Product>>, response: Response<List<Product>>) {
                 if (response.isSuccessful) {
                     val products = response.body() ?: emptyList()
-                    allProducts = products // Almacenar la lista completa para búsqueda
+                    allProducts = products
                     productAdapter.updateProducts(products)
                 } else {
                     Toast.makeText(this@TiendaActivity, "Error al cargar productos", Toast.LENGTH_SHORT).show()

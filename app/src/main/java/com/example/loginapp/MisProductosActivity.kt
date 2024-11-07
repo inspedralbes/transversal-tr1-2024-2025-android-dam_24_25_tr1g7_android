@@ -114,7 +114,7 @@ class MisProductosActivity : AppCompatActivity() {
                     val userProducts = allProducts.filter { it.owner_id == userId }
                     misProductosAdapter.updateProducts(userProducts)
 
-                    // Log para depuración
+
                     Log.d("MisProductos", "Productos cargados: ${userProducts.size} de ${allProducts.size}")
                     Log.d("MisProductos", "User ID: $userId")
                 } else {
@@ -153,7 +153,7 @@ class MisProductosActivity : AppCompatActivity() {
                 material = materialEditText.text.toString(),
                 price = priceEditText.text.toString().toDoubleOrNull() ?: 0.0,
                 stock = stockEditText.text.toString().toIntOrNull() ?: 0,
-                string_imatge = imageBase64, // Usar la imagen en Base64
+                string_imatge = imageBase64,
                 owner_id = getUserId()
             )
             addProductToDatabase(newProduct)
@@ -239,7 +239,7 @@ class MisProductosActivity : AppCompatActivity() {
                 material = materialEditText.text.toString(),
                 price = priceEditText.text.toString().toDoubleOrNull() ?: 0.0,
                 stock = stockEditText.text.toString().toIntOrNull() ?: 0,
-                string_imatge = imageBase64, // Use the updated Base64 string
+                string_imatge = imageBase64,
                 owner_id = product.owner_id
             )
             updateProductInDatabase(updatedProduct)

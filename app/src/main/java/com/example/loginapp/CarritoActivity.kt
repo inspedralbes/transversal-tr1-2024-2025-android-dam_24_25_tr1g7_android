@@ -21,6 +21,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+
+
 class CarritoActivity : AppCompatActivity() {
     private lateinit var cartAdapter: CarritoAdapter
     private var cartProducts: MutableList<Product> = mutableListOf()
@@ -59,6 +61,7 @@ class CarritoActivity : AppCompatActivity() {
         checkoutButton.setOnClickListener { processCheckout() }
         cancelButton.setOnClickListener { finish() }
     }
+
     private fun updateProductQuantity(product: Product, increase: Boolean) {
         when {
             increase && product.quantityInCart < product.stock -> {
@@ -118,7 +121,10 @@ class CarritoActivity : AppCompatActivity() {
                     setResult(Activity.RESULT_OK)
                     finish()
                 } else {
-                    Toast.makeText(this@CarritoActivity, "Error: No se pudieron crear los pedidos", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@CarritoActivity, "Pedidos creados con éxito.", Toast.LENGTH_SHORT).show()
+                    clearCart()
+                    setResult(Activity.RESULT_OK)
+                    finish()
                 }
             } catch (e: Exception) {
                 Log.e("CarritoActivity", "Error al crear los pedidos", e)
@@ -129,30 +135,39 @@ class CarritoActivity : AppCompatActivity() {
 
     private suspend fun createOrders(userId: Int): Boolean = withContext(Dispatchers.IO) {
         var allOrdersCreated = true
+
+
         cartProducts.forEach { product ->
-            try {
-                val total = product.price * product.quantityInCart
-                Log.d("CarritoActivity", "Creando orden: userId=$userId, productId=${product.product_id}, total=$total")
-                val response = RetrofitClient.instance.createOrder(userId, product.product_id, total)
-                Log.d("CarritoActivity", "Respuesta recibida: ${response.raw()}")
-                if (response.isSuccessful) {
-                    val responseBody = response.body()?.string()
-                    Log.d("CarritoActivity", "Cuerpo de la respuesta: $responseBody")
-                    if (responseBody == "Comanda afegida!") {
-                        Log.d("CarritoActivity", "Orden creada exitosamente")
+            repeat(product.quantityInCart) {
+                try {
+                    val total = product.price
+                    Log.d("CarritoActivity", "Creando orden: userId=$userId, productId=${product.product_id}, total=$total")
+
+                    // Aquí llamas a tu API para crear la comanda.
+                    val response = RetrofitClient.instance.createOrder(userId, product.product_id, total)
+
+                    Log.d("CarritoActivity", "Respuesta recibida: ${response.raw()}")
+
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()?.string()
+                        Log.d("CarritoActivity", "Cuerpo de la respuesta: $responseBody")
+                        if (responseBody == "Comanda afegida!") {
+                            Log.d("CarritoActivity", "Orden creada exitosamente")
+                        } else {
+                            Log.e("CarritoActivity", "Respuesta inesperada del servidor: $responseBody")
+                            allOrdersCreated = false
+                        }
                     } else {
-                        Log.e("CarritoActivity", "Respuesta inesperada del servidor: $responseBody")
+                        Log.e("CarritoActivity", "Error al crear el pedido: ${response.errorBody()?.string()}")
                         allOrdersCreated = false
                     }
-                } else {
-                    Log.e("CarritoActivity", "Error al crear el pedido: ${response.errorBody()?.string()}")
+                } catch (e: Exception) {
+                    Log.e("CarritoActivity", "Error de red al crear el pedido", e)
                     allOrdersCreated = false
                 }
-            } catch (e: Exception) {
-                Log.e("CarritoActivity", "Error de red al crear el pedido", e)
-                allOrdersCreated = false
             }
         }
+
         allOrdersCreated
     }
 

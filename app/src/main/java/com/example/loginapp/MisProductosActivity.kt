@@ -44,7 +44,7 @@ class MisProductosActivity : AppCompatActivity() {
     private lateinit var searchView: SearchView
     private lateinit var apiService: ApiService
     private lateinit var backButton: ImageButton
-    private lateinit var imageBase64: String
+    private var imageBase64: String = ""
     private lateinit var imagePreview: ImageView
 
     private val getContent = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -55,7 +55,7 @@ class MisProductosActivity : AppCompatActivity() {
                 imagePreview.setImageBitmap(imageBitmap)
                 imagePreview.visibility = View.VISIBLE
                 imageBase64 = convertBitmapToBase64(imageBitmap)
-                Log.d("string_image", imageBase64)
+                Log.d("string_image", "Base64 length: ${imageBase64.length}")
             }
         }
     }
@@ -153,11 +153,11 @@ class MisProductosActivity : AppCompatActivity() {
                 material = materialEditText.text.toString(),
                 price = priceEditText.text.toString().toDoubleOrNull() ?: 0.0,
                 stock = stockEditText.text.toString().toIntOrNull() ?: 0,
-                image_file = imageBase64, // Usar la imagen en Base64
+                string_imatge = imageBase64, // Usar la imagen en Base64
                 owner_id = getUserId()
             )
             addProductToDatabase(newProduct)
-            Log.d("image_file", newProduct.image_file)
+            Log.d("image_file", newProduct.string_imatge)
         }
 
         dialog.setNegativeButton("Cancelar", null)
@@ -166,27 +166,34 @@ class MisProductosActivity : AppCompatActivity() {
 
     private fun convertBitmapToBase64(bitmap: Bitmap): String {
         val outputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        outputStream.flush()
         val byteArray = outputStream.toByteArray()
-        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+        outputStream.close()
+        Log.d("ImageConversion", "Base64 length: ${imageBase64.length}")
+        return Base64.encodeToString(byteArray, Base64.NO_WRAP)
     }
 
+
+
     private fun addProductToDatabase(product: ProductCreateRequest) {
-        apiService.createProduct(product).enqueue(object : Callback<Product> {
-            override fun onResponse(call: Call<Product>, response: Response<Product>) {
+        Log.d("ProductUpload", "Image size before serialization: ${product.string_imatge.length} characters")
+        apiService.createProduct(product).enqueue(object : Callback<String> {
+            override fun onResponse(call: Call<String>, response: Response<String>) {
                 if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    Log.d("ProductUpload", "Server response: $responseBody")
                     Toast.makeText(this@MisProductosActivity, "Producto añadido con éxito", Toast.LENGTH_SHORT).show()
                     loadProductsFromServer()
-                    Log.d("ProductUpload", "Sending product: ${Gson().toJson(product)}")
                 } else {
-                    Log.d("ProductUpload", "Sending product: ${Gson().toJson(product)}")
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("ProductUpload", "Error response: $errorBody")
                     Toast.makeText(this@MisProductosActivity, "Error al añadir el producto", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<Product>, t: Throwable) {
-                Log.d("ProductUpload", "Sending product: ${Gson().toJson(product)}")
-                loadProductsFromServer()
+            override fun onFailure(call: Call<String>, t: Throwable) {
+               loadProductsFromServer()
             }
         })
     }
@@ -232,7 +239,7 @@ class MisProductosActivity : AppCompatActivity() {
                 material = materialEditText.text.toString(),
                 price = priceEditText.text.toString().toDoubleOrNull() ?: 0.0,
                 stock = stockEditText.text.toString().toIntOrNull() ?: 0,
-                image_file = imageBase64, // Use the updated Base64 string
+                string_imatge = imageBase64, // Use the updated Base64 string
                 owner_id = product.owner_id
             )
             updateProductInDatabase(updatedProduct)

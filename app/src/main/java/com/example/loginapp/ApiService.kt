@@ -69,8 +69,10 @@ interface ApiService {
     @PUT("/canceled")
     suspend fun setCanceledStatus(@Query("order_id") orderId: Int): Response<Void>
 
+
+
     @POST("/createProducte")
-    fun createProduct(@Body product: ProductCreateRequest): Call<Product>
+    fun createProduct(@Body product: ProductCreateRequest): Call<String>
 
 
         @DELETE("deleteProducte")

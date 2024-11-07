@@ -4,6 +4,6 @@ data class ProductCreateRequest(
     val material: String,
     val price: Double,
     val stock: Int,
-    val image_file: String,
+    val string_imatge: String,
     val owner_id: Int
 )

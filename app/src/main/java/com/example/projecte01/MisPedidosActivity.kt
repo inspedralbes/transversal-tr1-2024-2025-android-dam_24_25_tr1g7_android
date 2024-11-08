@@ -3,6 +3,7 @@ package com.example.projecte01
 import Order
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +26,11 @@ class MisPedidosActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mis_pedidos)
 
+        val botonAtras = findViewById<ImageButton>(R.id.botonAtras)
+        botonAtras.setOnClickListener {
+            finish()
+        }
+
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewPedidos)
         pedidosList = mutableListOf()
         pedidosAdapter = MisPedidosAdapter(pedidosList)
@@ -44,14 +50,10 @@ class MisPedidosActivity : AppCompatActivity() {
             val response = RetrofitClient.instance.getOrders()
             if (response.isSuccessful) {
                 pedidosList.clear()
-                response.body()?.let { pedidosList.addAll(it) }
-                runOnUiThread {
-                    pedidosAdapter.notifyDataSetChanged()
+                response.body()?.let {
+
                 }
-            } else {
-                runOnUiThread {
-                    Toast.makeText(this@MisPedidosActivity, "Error al cargar pedidos", Toast.LENGTH_SHORT).show()
-                }
+
             }
         }
     }

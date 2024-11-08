@@ -9,20 +9,36 @@
         android:id="@+id/pedidoIdTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pedido ID: "
-        android:textSize="16sp" />
+        android:text="Pedido ID:" />
 
     <TextView
         android:id="@+id/pedidoStatusTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Estado: "
-        android:textSize="14sp" />
+        android:text="Estado:" />
 
     <TextView
         android:id="@+id/pedidoTotalTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Total: "
-        android:textSize="14sp" />
+        android:text="Total:" />
+
+    <TextView
+        android:id="@+id/pedidoNombreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nombre del Producto:" />
+
+    <TextView
+        android:id="@+id/pedidoDetallesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Detalles:" />
+
+    <ImageView
+        android:id="@+id/pedidoImagenImageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop" />
+
 </LinearLayout>

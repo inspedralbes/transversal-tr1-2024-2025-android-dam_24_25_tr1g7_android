@@ -3,6 +3,7 @@ package com.example.projecte01
 import Order
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +25,10 @@ class MisPedidosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mis_pedidos)
+        val botonAtras = findViewById<ImageButton>(R.id.botonAtras)
+        botonAtras.setOnClickListener {
+            finish()
+        }
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerViewPedidos)
         pedidosList = mutableListOf()
@@ -44,7 +49,12 @@ class MisPedidosActivity : AppCompatActivity() {
             val response = RetrofitClient.instance.getOrders()
             if (response.isSuccessful) {
                 pedidosList.clear()
-                response.body()?.let { pedidosList.addAll(it) }
+                response.body()?.let {
+                    val pedidoReciente = it.lastOrNull()
+                    if (pedidoReciente != null) {
+                        pedidosList.add(pedidoReciente)
+                    }
+                }
                 runOnUiThread {
                     pedidosAdapter.notifyDataSetChanged()
                 }
@@ -55,6 +65,7 @@ class MisPedidosActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private val onPedidoStatusChange = Emitter.Listener { args ->
         val data = args[0] as JSONObject

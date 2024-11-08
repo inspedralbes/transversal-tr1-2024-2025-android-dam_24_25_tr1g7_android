@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LoginApp</string>
+    <string name="app_name">Essential Woods</string>
     <string name="product_image">Imagen del producto</string>
     <string name="product_name">Nombre del producto</string>
     <string name="product_description">Descripción del producto</string>

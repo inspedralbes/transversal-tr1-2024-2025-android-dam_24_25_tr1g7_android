@@ -4,6 +4,9 @@ import Product
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.InputFilter
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -20,7 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import java.util.regex.Pattern
 
 
 class CarritoActivity : AppCompatActivity() {
@@ -39,6 +42,7 @@ class CarritoActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.cartRecyclerView)
         totalPriceTextView = findViewById(R.id.totalPriceTextView)
         pickupTimeEditText = findViewById(R.id.pickupTimeEditText)
+        setupTimeEditText()
         val checkoutButton: Button = findViewById(R.id.checkoutButton)
         val cancelButton: Button = findViewById(R.id.cancelButton)
 
@@ -101,8 +105,8 @@ class CarritoActivity : AppCompatActivity() {
 
     private fun processCheckout() {
         val pickupTime = pickupTimeEditText.text.toString()
-        if (pickupTime.isBlank()) {
-            Toast.makeText(this, "Por favor, indica la hora de recogida", Toast.LENGTH_SHORT).show()
+        if (!isValidTime(pickupTime)) {
+            Toast.makeText(this, "Por favor, ingresa una hora válida en formato HH:MM", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -217,5 +221,56 @@ class CarritoActivity : AppCompatActivity() {
             apply()
         }
         Log.d("CarritoActivity", "Carrito vacío guardado en almacenamiento")
+    }
+
+    private fun isValidTime(time: String): Boolean {
+        val pattern = Pattern.compile("^([01]?[0-9]|2[0-3]):[0-5][0-9]$")
+        return pattern.matcher(time).matches()
+    }
+
+    private fun setupTimeEditText() {
+        val timeFilter = InputFilter { source, start, end, dest, dstart, dend ->
+            val result = StringBuilder()
+            for (i in start until end) {
+                val currentChar = source[i]
+                if (Character.isDigit(currentChar) || currentChar == ':') {
+                    result.append(currentChar)
+                }
+            }
+
+            val newValue = dest.toString().substring(0, dstart) + result + dest.toString().substring(dend)
+            if (newValue.length > 5) {
+                return@InputFilter ""
+            }
+
+            if (newValue.length == 2 && !newValue.contains(":")) {
+                return@InputFilter "$result:"
+            }
+
+            result
+        }
+
+        pickupTimeEditText.filters = arrayOf(timeFilter)
+
+        pickupTimeEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.length == 5) {
+                    val hour = s.substring(0, 2).toIntOrNull()
+                    val minute = s.substring(3, 5).toIntOrNull()
+                    if (hour != null && minute != null) {
+                        if (hour > 23 || minute > 59) {
+                            pickupTimeEditText.error = "Hora inválida"
+                        } else {
+                            pickupTimeEditText.error = null
+                        }
+                    }
+                }
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
+
+
     }
 }

@@ -50,8 +50,7 @@ class MisPedidosActivity : AppCompatActivity() {
             if (response.isSuccessful) {
                 pedidosList.clear()
                 response.body()?.let {
-                    // Obtener el pedido más reciente (último en la lista)
-                    val pedidoReciente = it.lastOrNull() // O usa otra lógica para identificar el pedido reciente
+                    val pedidoReciente = it.lastOrNull()
                     if (pedidoReciente != null) {
                         pedidosList.add(pedidoReciente)
                     }

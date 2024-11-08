@@ -1,4 +1,3 @@
-// SocketHandler.kt
 package com.example.projecte01
 
 import io.socket.client.IO

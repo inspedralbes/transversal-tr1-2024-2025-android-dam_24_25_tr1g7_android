@@ -25,7 +25,6 @@ class MisPedidosActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mis_pedidos)
-
         val botonAtras = findViewById<ImageButton>(R.id.botonAtras)
         botonAtras.setOnClickListener {
             finish()
@@ -51,12 +50,23 @@ class MisPedidosActivity : AppCompatActivity() {
             if (response.isSuccessful) {
                 pedidosList.clear()
                 response.body()?.let {
-
+                    // Obtener el pedido más reciente (último en la lista)
+                    val pedidoReciente = it.lastOrNull() // O usa otra lógica para identificar el pedido reciente
+                    if (pedidoReciente != null) {
+                        pedidosList.add(pedidoReciente)
+                    }
                 }
-
+                runOnUiThread {
+                    pedidosAdapter.notifyDataSetChanged()
+                }
+            } else {
+                runOnUiThread {
+                    Toast.makeText(this@MisPedidosActivity, "Error al cargar pedidos", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
+
 
     private val onPedidoStatusChange = Emitter.Listener { args ->
         val data = args[0] as JSONObject

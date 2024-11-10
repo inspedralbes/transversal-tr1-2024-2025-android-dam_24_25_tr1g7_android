@@ -24,20 +24,21 @@
         android:text="Total:" />
 
     <TextView
-        android:id="@+id/pedidoNameTextView"
+        android:id="@+id/pedidoNombreTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nombre del producto" />
+        android:text="Nombre del Producto:" />
 
     <TextView
-        android:id="@+id/pedidoDescriptionTextView"
+        android:id="@+id/pedidoDetallesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Descripción del producto" />
+        android:text="Detalles:" />
 
     <ImageView
-        android:id="@+id/pedidoImageView"
+        android:id="@+id/pedidoImagenImageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop" />
+
 </LinearLayout>

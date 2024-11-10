@@ -1,4 +1,3 @@
-<!-- res/layout/item_fullscreen_product.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"

@@ -147,7 +147,6 @@ class CarritoActivity : AppCompatActivity() {
                     val total = product.price
                     Log.d("CarritoActivity", "Creando orden: userId=$userId, productId=${product.product_id}, total=$total")
 
-                    // Aquí llamas a tu API para crear la comanda.
                     val response = RetrofitClient.instance.createOrder(userId, product.product_id, total)
 
                     Log.d("CarritoActivity", "Respuesta recibida: ${response.raw()}")

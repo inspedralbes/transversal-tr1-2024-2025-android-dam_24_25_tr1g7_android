@@ -169,7 +169,7 @@ class CarritoActivity : AppCompatActivity() {
                                 order_id = comandaJson.getInt("order_id"),
                                 user_id = comandaJson.getInt("user_id"),
                                 product_id = comandaJson.getInt("product_id"),
-                                order_date = "", // El servidor debería proporcionar esto, pero lo omitimos aquí
+                                order_date = "", 
                                 status = comandaJson.getString("status"),
                                 total = comandaJson.getDouble("total")
                             )

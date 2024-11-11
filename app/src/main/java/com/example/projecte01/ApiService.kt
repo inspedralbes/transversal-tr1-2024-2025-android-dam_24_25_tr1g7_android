@@ -1,6 +1,7 @@
 package com.example.projecte01
 
 import Order
+import OrderRequest
 import Product
 import ProductCreateRequest
 import ProductUpdateRequest
@@ -28,8 +29,8 @@ interface ApiService {
     @PUT("/updateUsuari")
     fun updateUsuari(@QueryMap params: Map<String, String>): Call<Void>
 
-    @POST("/orders")
-    suspend fun createOrder(@Body order: Order): Response<Order>
+    @POST("/createComanda")
+    suspend fun createOrder(@Body order: OrderRequest): Response<ResponseBody>
 
     @GET("/getComandes")
     suspend fun getOrders(): Response<List<Order>>

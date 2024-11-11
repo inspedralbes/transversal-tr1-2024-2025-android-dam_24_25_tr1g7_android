@@ -1,5 +1,7 @@
 package com.example.projecte01
 
+import Order
+import OrderRequest
 import Product
 import android.app.Activity
 import android.content.Context
@@ -23,6 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.util.regex.Pattern
 
 
@@ -139,24 +142,38 @@ class CarritoActivity : AppCompatActivity() {
 
     private suspend fun createOrders(userId: Int): Boolean = withContext(Dispatchers.IO) {
         var allOrdersCreated = true
-
-
         cartProducts.forEach { product ->
             repeat(product.quantityInCart) {
                 try {
                     val total = product.price
-                    Log.d("CarritoActivity", "Creando orden: userId=$userId, productId=${product.product_id}, total=$total")
+                    val orderRequest = OrderRequest(
+                        user_id = userId,
+                        product_id = product.product_id,
+                        total = total
+                    )
 
-                    // Aquí llamas a tu API para crear la comanda.
-                    val response = RetrofitClient.instance.createOrder(userId, product.product_id, total)
+                    Log.d("CarritoActivity", "Creando orden: $orderRequest")
 
+                    val response = RetrofitClient.instance.createOrder(orderRequest)
                     Log.d("CarritoActivity", "Respuesta recibida: ${response.raw()}")
 
                     if (response.isSuccessful) {
                         val responseBody = response.body()?.string()
                         Log.d("CarritoActivity", "Cuerpo de la respuesta: $responseBody")
-                        if (responseBody == "Comanda afegida!") {
-                            Log.d("CarritoActivity", "Orden creada exitosamente")
+
+                        // Parseamos la respuesta JSON
+                        val jsonResponse = JSONObject(responseBody)
+                        if (jsonResponse.has("message") && jsonResponse.getString("message").contains("afegida")) {
+                            val comandaJson = jsonResponse.getJSONObject("comanda")
+                            val createdOrder = Order(
+                                order_id = comandaJson.getInt("order_id"),
+                                user_id = comandaJson.getInt("user_id"),
+                                product_id = comandaJson.getInt("product_id"),
+                                order_date = "", // El servidor debería proporcionar esto, pero lo omitimos aquí
+                                status = comandaJson.getString("status"),
+                                total = comandaJson.getDouble("total")
+                            )
+                            Log.d("CarritoActivity", "Orden creada exitosamente: $createdOrder")
                         } else {
                             Log.e("CarritoActivity", "Respuesta inesperada del servidor: $responseBody")
                             allOrdersCreated = false
@@ -171,14 +188,16 @@ class CarritoActivity : AppCompatActivity() {
                 }
             }
         }
-
         allOrdersCreated
     }
-
     private fun getUserId(): Int {
         val sharedPref = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         return sharedPref.getInt("user_id", -1)
     }
+
+
+
+
 
     private fun clearCart() {
         cartProducts.clear()

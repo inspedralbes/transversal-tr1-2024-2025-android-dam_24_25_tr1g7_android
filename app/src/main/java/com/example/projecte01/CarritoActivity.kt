@@ -161,7 +161,6 @@ class CarritoActivity : AppCompatActivity() {
                         val responseBody = response.body()?.string()
                         Log.d("CarritoActivity", "Cuerpo de la respuesta: $responseBody")
 
-                        // Parseamos la respuesta JSON
                         val jsonResponse = JSONObject(responseBody)
                         if (jsonResponse.has("message") && jsonResponse.getString("message").contains("afegida")) {
                             val comandaJson = jsonResponse.getJSONObject("comanda")
